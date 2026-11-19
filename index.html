@@ -98,6 +98,8 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
  <div class="gap"><button class="btn p" id="csv">Eksport CSV (Excel)</button><button class="btn p" id="pdf">Eksport PDF</button></div>
  <h2>Norma czasu pracy</h2>
  <div class="card"><label class="mut">Godzin dziennie</label><input type="number" id="nh" min="0" max="24" step="0.5" inputmode="decimal"><div class="mut" style="margin-bottom:8px">Dni pracujące (norma liczy się tylko za te dni)</div><div class="gap" id="wd"></div></div>
+ <h2>Tryb offline</h2>
+ <div class="card"><div class="mut" id="ofs">Sprawdzam…</div><div class="gap" style="margin-top:8px"><button class="btn p" id="ofa">Zapisz do użycia offline</button><button class="btn d" id="ofr">Usuń zapisane offline</button></div><p class="mut" style="font-size:13px;margin:8px 0 0">Zapisuje pliki apki w pamięci przeglądarki, żeby działała bez internetu. Twoich wpisów to nie dotyczy: usunięcie zapisu offline ich nie kasuje.</p></div>
  <h2>Kopia zapasowa</h2>
  <div class="gap"><button class="btn" id="bk">Zapisz kopię (JSON)</button><button class="btn" id="im">Wczytaj kopię</button></div>
  <div class="gap" style="margin-top:8px"><button class="btn p" id="bc">Backup CSV: eksport</button><button class="btn" id="ic">Backup CSV: import</button></div>
@@ -373,6 +375,25 @@ $('cs').onclick=function(){var v=$('cv').value;if(!v){$('ce').textContent='Wybie
  else{if(isH(dk(t))){$('ce').textContent='Ten dzień jest oznaczony jako święto';return}if(S.some(function(x){return x.s>t||(x.e&&t<x.e)})){$('ce').textContent='Ta godzina koliduje z innymi wpisami. Użyj Historia → Dodaj wpis ręcznie.';return}S.push({id:Date.now().toString(36),s:t,e:null})}
  save();$('mc').classList.remove('on');render()};
 function msg(t){$('msg').textContent=t}
+var SWN='czas-pracy-v1';
+async function ofst(){
+ if(!('serviceWorker' in navigator)||!window.caches){$('ofs').textContent='Ta przeglądarka nie obsługuje trybu offline.';return}
+ try{var regs=await navigator.serviceWorker.getRegistrations(),has=await caches.has(SWN);
+  $('ofs').textContent=has&&regs.length?'Zapisano offline: tak. Apka może działać bez internetu.':'Zapisano offline: nie.'}
+ catch(e){$('ofs').textContent='Stan trybu offline jest niedostępny w tym widoku.'}}
+$('ofa').onclick=async function(){
+ if(!('serviceWorker' in navigator)||!window.caches){msg('Ta przeglądarka nie obsługuje trybu offline.');return}
+ $('ofs').textContent='Zapisuję…';
+ try{await navigator.serviceWorker.register('sw.js');await navigator.serviceWorker.ready;
+  for(var i=0;i<20&&!(await caches.has(SWN));i++)await new Promise(function(r){setTimeout(r,250)});
+  try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}
+ }catch(e){$('ofs').textContent='Nie udało się zapisać. Ta funkcja działa tylko na własnej stronie (https), np. GitHub Pages, i wymaga pliku sw.js obok index.html.';return}
+ ofst()};
+$('ofr').onclick=async function(){
+ try{var regs=await navigator.serviceWorker.getRegistrations();for(var i=0;i<regs.length;i++)await regs[i].unregister();
+  var ks=await caches.keys();for(var j=0;j<ks.length;j++)if(ks[j].indexOf('czas-pracy-')===0)await caches.delete(ks[j])}catch(e){}
+ ofst()};
+ofst();
 async function dlFallback(name,data){
  var ty=name.slice(-4)==='.pdf'?'application/pdf':name.slice(-5)==='.json'?'application/json':name.slice(-5)==='.xlsx'?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'text/csv';
  var blob=data instanceof Blob?data:new Blob([data],{type:ty});
