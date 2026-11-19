@@ -110,6 +110,8 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
  <p class="mut" style="font-size:13px">Wersja Excel ma osobne arkusze (Wpisy, Urlopy, Święta, Odbiory, Ustawienia), które możesz edytować w Excelu: poprawiać, dodawać i usuwać wiersze. Daty wpisuj jako RRRR-MM-DD, a daty z godziną jako RRRR-MM-DD GG:MM. Import zastępuje dane z arkuszy danymi z pliku (po potwierdzeniu).</p>
  <input type="file" id="fi" accept=".json,application/json" hidden>
  <p class="mut" id="msg"></p>
+ <h2>Wersja</h2>
+ <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b id="vnm"></b><button class="btn" id="vbt">Historia zmian ▾</button></div><div id="vlg" style="display:none;margin-top:12px"></div></div>
 </section>
 <section class="v" id="v3">
  <h2>Urlop</h2>
@@ -282,6 +284,25 @@ $('qy').onclick=function(){var N=PQ;PQ=null;$('mq').classList.remove('on');if(!N
  S=N.S;if(N.vac)CF.vac=N.vac;if(N.hol)CF.hol=N.hol;if(N.off)CF.off=N.off;
  for(var k in N.cfg)CF[k]=N.cfg[k];
  save();saveC();$('nh').value=CF.norm;wdr();render();msg('Zastąpiono dane danymi z Excela.')};
+var VER=[
+{v:'2.0',n:'Wersje',d:'19.11.2026',c:['Nazwa wersji i historia zmian na dole zakładki Raport']},
+{v:'1.9',n:'Poprawki i kolory',d:'19.11.2026',c:['Naprawiony przycisk „Dodaj święto” (zdublowany identyfikator pola)','Naprawione znikanie danych na zakładkach po rozwinięciu kalendarza (kolizja nazw klas)','Święta w kalendarzu oznaczone na różowo']},
+{v:'1.8',n:'Liquid Glass',d:'19.11.2026',c:['Nowy wygląd: szkło, rozmycie tła, pływające dolne menu','Dolne menu jak slider: przesuwająca się pigułka i przeciąganie palcem po pasku']},
+{v:'1.7',n:'Backup',d:'19.11.2026',c:['Backup CSV całej historii: eksport i import (import dopisuje brakujące dane)','Backup Excel (.xlsx) z osobnymi arkuszami do edycji; import zastępuje dane po potwierdzeniu','Zapis plików także poza Claude (okno udostępniania) w wersji niezależnej']},
+{v:'1.6',n:'Bank godzin',d:'19.11.2026',c:['Zakładka Bank: saldo nadgodzin do odebrania','Odbiór godzin w zakresie od-do wybieranym zegarem oraz saldo początkowe','Odebrane godziny zmniejszają normę danego dnia w raporcie']},
+{v:'1.5',n:'Pulpit i kalendarz',d:'14.11.2026',c:['Kółka u góry: pozostały urlop oraz godziny i dni pracy w bieżącym miesiącu','Rozwijany kalendarz: dni z wpisami, urlopy (przerywane kółko) i święta','Historia pokazuje wszystkie miesiące z nagłówkami, a filtr miesiąca jest opcjonalny i wyśrodkowany']},
+{v:'1.4',n:'Oznacz dzień',d:'14.11.2026',c:['Wybór Urlop / Święto dla dowolnego dnia na ekranie Dziś, powiązany z zakładką Urlop','Jeden zielony przycisk-kółko z oknem wyboru: Urlop, Święto albo Powrót']},
+{v:'1.3',n:'Urlopy i święta',d:'14.11.2026',c:['Zakładka Urlop: pula dni na rok, dodawanie urlopu zakresem dat, lista z usuwaniem','Dni świąteczne blokujące wejście','Urlop i święta nie wliczają się do normy, a ich liczba jest w raporcie']},
+{v:'1.2',n:'Norma i nadgodziny',d:'14.11.2026',c:['Norma dzienna (domyślnie 8 h) i wybór dni pracujących','Raport tygodnia i miesiąca','Saldo do normy, nadgodziny ponad normę dzienną i różnica dnia w CSV oraz PDF']},
+{v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
+{v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
+];
+(function(){var cur=VER[0];
+ if($('ofa'))cur.c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
+ $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
+ $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
+ $('vbt').onclick=function(){var o=$('vlg').style.display==='none';$('vlg').style.display=o?'block':'none';$('vbt').textContent='Historia zmian '+(o?'▴':'▾')};
+})();
 function tmin(v){var p=v.split(':');return +p[0]*60+ +p[1]}
 function hh(m){return p2(Math.floor(m/60))+':'+p2(m%60)}
 function bren(){var b=bank();$('bb').textContent=sd(b.bal);
