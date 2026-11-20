@@ -13,6 +13,7 @@ self.addEventListener('activate',function(e){
 });
 self.addEventListener('fetch',function(e){
  var r=e.request;if(r.method!=='GET')return;
+ if(new URL(r.url).origin!==self.location.origin&&LIBS.indexOf(r.url)<0)return;
  e.respondWith(caches.open(C).then(function(c){
   return c.match(r,{ignoreSearch:true}).then(function(hit){
    var net=fetch(r).then(function(res){if(res&&(res.ok||res.type==='opaque'))c.put(r,res.clone());return res}).catch(function(){return hit||Response.error()});

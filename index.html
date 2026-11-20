@@ -41,9 +41,9 @@ nav{position:fixed;bottom:0;left:0;right:0;display:flex;background:var(--card);b
 nav button{flex:1;border:0;background:none;padding:14px 0;color:var(--mut);font-weight:600;font-size:14px}
 nav button.on{color:var(--ac)}
 .v{display:none}.v.on{display:block}
-#md,#mc,#mx,#mq{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:5}
-#md.on,#mc.on,#mx.on,#mq.on{display:flex}
-#md .card,#mc .card,#mx .card,#mq .card{width:100%;max-width:520px;border-radius:20px 20px 0 0;margin:0;padding:18px 18px 28px}
+#md,#mc,#mx,#mq,#mo,#mg{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;justify-content:center;z-index:5}
+#md.on,#mc.on,#mx.on,#mq.on,#mo.on,#mg.on{display:flex}
+#md .card,#mc .card,#mx .card,#mq .card,#mo .card,#mg .card{width:100%;max-width:520px;border-radius:20px 20px 0 0;margin:0;padding:18px 18px 28px}
 .gap{display:flex;gap:8px;flex-wrap:wrap}
 /* Liquid Glass */
 :root{--card:rgba(255,255,255,.52);--bd:rgba(255,255,255,.65);--gl:rgba(255,255,255,.45);--cs:rgba(255,255,255,.8);--b1:rgba(63,182,124,.35);--b2:rgba(90,140,255,.30);--b3:rgba(255,150,120,.28)}
@@ -67,8 +67,9 @@ nav button{border-radius:28px;position:relative;z-index:1;transition:color .2s}
 nav button.on{background:none;color:var(--ac)}
 nav{touch-action:none;-webkit-user-select:none;user-select:none}
 #nv{position:absolute;top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/5);border-radius:28px;background:rgba(127,127,127,.2);border:1px solid var(--bd);box-shadow:0 2px 10px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.6);transition:transform .38s cubic-bezier(.3,1.35,.5,1);pointer-events:none}
-#md,#mc,#mx,#mq{background:rgba(0,0,0,.25);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-#md .card,#mc .card,#mx .card,#mq .card{background:var(--cs);border-radius:30px 30px 0 0}
+#md,#mc,#mx,#mq,#mo,#mg{background:rgba(0,0,0,.25);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+#md .card,#mc .card,#mx .card,#mq .card,#mo .card,#mg .card{background:var(--cs);border-radius:30px 30px 0 0}
+#mo .card{max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 </style></head><body>
 <main>
 <div id="chd" style="display:flex;justify-content:center;gap:16px;margin:4px 0 6px"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
@@ -91,28 +92,14 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
  <div id="hl" style="margin-top:12px"></div>
 </section>
 <section class="v" id="v2">
- <h2>Raport miesiąca</h2>
+ <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:22px 0 8px">Raport miesiąca</h2><button class="btn" id="gb" aria-label="Opcje" title="Opcje" style="width:40px;height:40px;padding:0;font-size:20px;line-height:1">⚙️</button></div>
  <div class="gap" style="margin-bottom:8px"><button class="btn p" id="rmM">Miesiąc</button><button class="btn" id="rmW">Tydzień</button></div>
  <input type="month" id="m2"><input type="date" id="w2" style="display:none">
  <div class="card"><div class="mut">Przepracowano w okresie</div><div class="tot" id="mt"></div><div class="mut" id="md2"></div></div>
  <div class="gap"><button class="btn p" id="csv">Eksport CSV (Excel)</button><button class="btn p" id="pdf">Eksport PDF</button></div>
  <h2>Norma czasu pracy</h2>
  <div class="card"><label class="mut">Godzin dziennie</label><input type="number" id="nh" min="0" max="24" step="0.5" inputmode="decimal"><div class="mut" style="margin-bottom:8px">Dni pracujące (norma liczy się tylko za te dni)</div><div class="gap" id="wd"></div></div>
- <h2>Tryb offline</h2>
- <div class="card"><div class="mut" id="ofs">Sprawdzam…</div><div class="gap" style="margin-top:8px"><button class="btn p" id="ofa">Zapisz do użycia offline</button><button class="btn d" id="ofr">Usuń zapisane offline</button></div><p class="mut" style="font-size:13px;margin:8px 0 0">Zapisuje pliki apki w pamięci przeglądarki, żeby działała bez internetu. Twoich wpisów to nie dotyczy: usunięcie zapisu offline ich nie kasuje.</p></div>
- <h2>Kopia zapasowa</h2>
- <div class="gap"><button class="btn" id="bk">Zapisz kopię (JSON)</button><button class="btn" id="im">Wczytaj kopię</button></div>
- <div class="gap" style="margin-top:8px"><button class="btn p" id="bc">Backup CSV: eksport</button><button class="btn" id="ic">Backup CSV: import</button></div>
- <input type="file" id="fc" accept=".csv,text/csv,text/plain" hidden>
- <p class="mut" style="font-size:13px">Backup CSV zawiera całą historię: wpisy, urlopy, święta, odbiory godzin i ustawienia. Import dopisuje brakujące dane (nie kasuje istniejących i nie dubluje). Nie edytuj pliku w Excelu, bo może zmienić format dat.</p>
- <div class="gap" style="margin-top:8px"><button class="btn p" id="xe">Excel (.xlsx): eksport do edycji</button><button class="btn" id="xi">Excel (.xlsx): import</button></div>
- <input type="file" id="fx" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
- <p class="mut" style="font-size:13px">Wersja Excel ma osobne arkusze (Wpisy, Urlopy, Święta, Odbiory, Ustawienia), które możesz edytować w Excelu: poprawiać, dodawać i usuwać wiersze. Daty wpisuj jako RRRR-MM-DD, a daty z godziną jako RRRR-MM-DD GG:MM. Import zastępuje dane z arkuszy danymi z pliku (po potwierdzeniu).</p>
- <input type="file" id="fi" accept=".json,application/json" hidden>
- <p class="mut" id="msg"></p>
- <h2>Wersja</h2>
- <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b id="vnm"></b><button class="btn" id="vbt">Historia zmian ▾</button></div><div id="vlg" style="display:none;margin-top:12px"></div></div>
-</section>
+ </section>
 <section class="v" id="v3">
  <h2>Urlop</h2>
  <div class="gap" style="align-items:center;margin-bottom:8px"><button class="btn" id="yp">‹</button><b id="yl"></b><button class="btn" id="yn">›</button></div>
@@ -134,6 +121,32 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
 </section>
 </main>
 <nav><div id="nv"></div><button class="on" data-t="0">Dziś</button><button data-t="1">Historia</button><button data-t="2">Raport</button><button data-t="3">Urlop</button><button data-t="4">Bank</button></nav>
+<div id="mo"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:18px">Opcje</b><button class="btn" id="go">Zamknij</button></div>
+ <h2>Tryb offline</h2>
+ <div class="card"><div class="mut" id="ofs">Sprawdzam…</div><div class="gap" style="margin-top:8px"><button class="btn p" id="ofa">Zapisz do użycia offline</button><button class="btn d" id="ofr">Usuń zapisane offline</button></div><p class="mut" style="font-size:13px;margin:8px 0 0">Zapisuje pliki apki w pamięci przeglądarki, żeby działała bez internetu. Twoich wpisów to nie dotyczy: usunięcie zapisu offline ich nie kasuje.</p></div>
+ <h2>Synchronizacja z Dyskiem Google</h2>
+ <div class="card"><label style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="gde" style="width:22px;height:22px"><span>Włącz synchronizację (opcjonalna)</span></label>
+ <div id="gdc" style="display:none;margin-top:10px">
+  <label class="mut">Identyfikator klienta Google (Client ID)</label>
+  <input type="text" id="gid" placeholder="xxxx.apps.googleusercontent.com" autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%;padding:10px;border:1px solid var(--bd);border-radius:16px;background:var(--gl);margin:4px 0 10px">
+  <div class="gap"><button class="btn p" id="gsy">Synchronizuj teraz</button><button class="btn" id="gdi">Rozłącz</button><button class="btn" id="gun">Cofnij ostatnią synchronizację</button></div>
+  <div class="mut" id="gst" style="margin-top:8px"></div>
+ </div>
+ <p class="mut" style="font-size:13px;margin:8px 0 0">Dane trafiają do ukrytego folderu aplikacji na Twoim Dysku Google, do którego dostęp ma tylko ta apka. Dopóki nie włączysz opcji, nic nie jest wysyłane i nie ładuje się żaden skrypt Google.</p></div>
+ <h2>Kopia zapasowa</h2>
+ <div class="gap"><button class="btn" id="bk">Zapisz kopię (JSON)</button><button class="btn" id="im">Wczytaj kopię</button></div>
+ <div class="gap" style="margin-top:8px"><button class="btn p" id="bc">Backup CSV: eksport</button><button class="btn" id="ic">Backup CSV: import</button></div>
+ <input type="file" id="fc" accept=".csv,text/csv,text/plain" hidden>
+ <p class="mut" style="font-size:13px">Backup CSV zawiera całą historię: wpisy, urlopy, święta, odbiory godzin i ustawienia. Import dopisuje brakujące dane (nie kasuje istniejących i nie dubluje). Nie edytuj pliku w Excelu, bo może zmienić format dat.</p>
+ <div class="gap" style="margin-top:8px"><button class="btn p" id="xe">Excel (.xlsx): eksport do edycji</button><button class="btn" id="xi">Excel (.xlsx): import</button></div>
+ <input type="file" id="fx" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden>
+ <p class="mut" style="font-size:13px">Wersja Excel ma osobne arkusze (Wpisy, Urlopy, Święta, Odbiory, Ustawienia), które możesz edytować w Excelu: poprawiać, dodawać i usuwać wiersze. Daty wpisuj jako RRRR-MM-DD, a daty z godziną jako RRRR-MM-DD GG:MM. Import zastępuje dane z arkuszy danymi z pliku (po potwierdzeniu).</p>
+ <input type="file" id="fi" accept=".json,application/json" hidden>
+ <p class="mut" id="msg"></p>
+ <h2>Wersja</h2>
+ <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b id="vnm"></b><button class="btn" id="vbt">Historia zmian ▾</button></div><div id="vlg" style="display:none;margin-top:12px"></div></div>
+</div></div>
+<div id="mg"><div class="card"><b>Zmiany po obu stronach</b><div class="mut" style="margin:6px 0 12px">Dane na tym urządzeniu i na Dysku Google różnią się. Co zachować?</div><div style="display:grid;gap:8px"><button class="btn p" id="gkm">Połącz (dopisz brakujące z obu stron)</button><button class="btn" id="gkl">Zachowaj dane z tego urządzenia</button><button class="btn" id="gkr">Zachowaj dane z Dysku Google</button><button class="btn" id="gkc">Anuluj</button></div><div class="mut" style="font-size:13px;margin-top:8px">Przy łączeniu usunięte wcześniej wpisy mogą wrócić. Przed zmianą apka zapisuje kopię, którą przywrócisz przyciskiem „Cofnij ostatnią synchronizację”.</div></div></div>
 <div id="mq"><div class="card"><b>Zastąpić dane danymi z pliku?</b><div class="mut" id="qt" style="margin:6px 0 12px"></div><div class="gap"><button class="btn p" id="qy">Zastąp dane</button><button class="btn" id="qn">Anuluj</button></div></div></div>
 <div id="mx"><div class="card"><b>Ten dzień</b><div class="mut" id="xs" style="margin:2px 0 12px"></div><div style="display:grid;gap:8px"><button class="btn" id="xv">Urlop</button><button class="btn" id="xh">Święto</button><button class="btn" id="xc">Powrót</button></div></div></div>
 <div id="mc"><div class="card"><b id="ct"></b><br><br><input type="datetime-local" id="cv"><p class="mut" id="ce" style="color:var(--red)"></p><div class="gap"><button class="btn p" id="cs">Zapisz</button><button class="btn" id="cc">Anuluj</button></div></div></div>
@@ -146,7 +159,7 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
 </div></div>
 <script>
 var S=[];try{S=JSON.parse(localStorage.getItem('wt')||'[]')}catch(e){}
-function save(){try{localStorage.setItem('wt',JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem('wt',JSON.stringify(S));localStorage.setItem('wtm',String(Date.now()))}catch(e){}}
 var $=function(i){return document.getElementById(i)};
 var p2=function(n){return String(n).padStart(2,'0')};
 var tm=function(t){var d=new Date(t);return p2(d.getHours())+':'+p2(d.getMinutes())};
@@ -161,7 +174,7 @@ var CF={};try{CF=JSON.parse(localStorage.getItem('wts'))||{}}catch(e){}
 if(!(CF.norm>=0))CF.norm=8;if(!Array.isArray(CF.days))CF.days=[1,2,3,4,5];
 if(!Array.isArray(CF.vac))CF.vac=[];if(!Array.isArray(CF.hol))CF.hol=[];if(!(CF.allow>=0))CF.allow=26;if(!Array.isArray(CF.off))CF.off=[];
 var RM='m';
-function saveC(){try{localStorage.setItem('wts',JSON.stringify(CF))}catch(e){}}
+function saveC(){try{localStorage.setItem('wts',JSON.stringify(CF));localStorage.setItem('wtm',String(Date.now()))}catch(e){}}
 function nm(){return CF.norm*3600000}
 function isBase(k){return CF.days.indexOf(new Date(k+'T12:00').getDay())>=0}
 function isH(k){return CF.hol.indexOf(k)>=0}
@@ -284,7 +297,56 @@ $('qy').onclick=function(){var N=PQ;PQ=null;$('mq').classList.remove('on');if(!N
  S=N.S;if(N.vac)CF.vac=N.vac;if(N.hol)CF.hol=N.hol;if(N.off)CF.off=N.off;
  for(var k in N.cfg)CF[k]=N.cfg[k];
  save();saveC();$('nh').value=CF.norm;wdr();render();msg('Zastąpiono dane danymi z Excela.')};
+$('gb').onclick=function(){$('mo').classList.add('on')};$('go').onclick=function(){$('mo').classList.remove('on')};$('mo').onclick=function(e){if(e.target===this)this.classList.remove('on')};
+var GL={on:false,cid:'',syn:0,at:0},GT=null,GTE=0,GP=null,GS='https://www.googleapis.com/auth/drive.appdata',GF='czas-pracy-sync.json';
+try{var _g=JSON.parse(localStorage.getItem('wtg'));if(_g)GL=Object.assign(GL,_g)}catch(e){}
+function gsv(){try{localStorage.setItem('wtg',JSON.stringify(GL))}catch(e){}}
+function gm(t){$('gst').textContent=t}
+function cfix(){if(!CF||typeof CF!=='object')CF={};if(!(CF.norm>=0))CF.norm=8;if(!Array.isArray(CF.days))CF.days=[1,2,3,4,5];if(!Array.isArray(CF.vac))CF.vac=[];if(!Array.isArray(CF.hol))CF.hol=[];if(!(CF.allow>=0))CF.allow=26;if(!Array.isArray(CF.off))CF.off=[]}
+function snapPrev(){try{localStorage.setItem('wtprev',JSON.stringify({S:S,CF:CF}))}catch(e){}}
+function gfin(mod){GL.syn=mod;GL.at=Date.now();gsv();try{localStorage.setItem('wtm',String(mod))}catch(e){}}
+function gapply(d){snapPrev();S=d.S||[];CF=d.CF;cfix();save();saveC();$('nh').value=CF.norm;wdr();render()}
+function gmerge(d){var seen={};S.forEach(function(x){seen[x.s+'_'+x.e]=1});(d.S||[]).forEach(function(x){if(!seen[x.s+'_'+x.e]&&!(x.e===null&&opn()))S.push(x)});
+ var c=d.CF||{};['vac','hol'].forEach(function(k){(c[k]||[]).forEach(function(v){if(CF[k].indexOf(v)<0)CF[k].push(v)})});
+ (c.off||[]).forEach(function(o){if(!CF.off.some(function(p){return p.d===o.d&&p.f===o.f&&p.t===o.t}))CF.off.push(o)})}
+function gload(){return new Promise(function(res,rej){if(window.google&&google.accounts)return res();var sc=document.createElement('script');sc.src='https://accounts.google.com/gsi/client';sc.onload=function(){res()};sc.onerror=function(){rej(new Error('nie udało się załadować logowania Google (brak internetu?)'))};document.head.appendChild(sc)})}
+function gtok(){return new Promise(function(res,rej){
+ if(GT&&Date.now()<GTE){res(GT);return}
+ if(!GL.cid){rej(new Error('wpisz Client ID'));return}
+ var c=google.accounts.oauth2.initTokenClient({client_id:GL.cid,scope:GS,callback:function(r){if(r&&r.access_token){GT=r.access_token;GTE=Date.now()+((r.expires_in||3600)-60)*1000;res(GT)}else rej(new Error((r&&r.error)||'brak zgody'))},error_callback:function(e){rej(new Error((e&&e.type)||'logowanie przerwane'))}});
+ c.requestAccessToken()})}
+async function gapi(url,method,body,ct){var h={Authorization:'Bearer '+GT};if(ct)h['Content-Type']=ct;var r=await fetch(url,{method:method||'GET',headers:h,body:body});if(r.status===401){GT=null;GTE=0;throw new Error('sesja wygasła, spróbuj ponownie')}if(!r.ok)throw new Error('błąd Dysku Google ('+r.status+')');return r}
+async function gfind(){var r=await gapi('https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&fields=files(id,name)&q='+encodeURIComponent("name='"+GF+"'"));var j=await r.json();return j.files&&j.files[0]?j.files[0].id:null}
+async function gget(id){var r=await gapi('https://www.googleapis.com/drive/v3/files/'+id+'?alt=media');return r.json()}
+async function gput(id,obj){var body=JSON.stringify(obj);
+ if(id){await gapi('https://www.googleapis.com/upload/drive/v3/files/'+id+'?uploadType=media','PATCH',body,'application/json');return id}
+ var bd='wtb'+Date.now(),mp='--'+bd+'\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n'+JSON.stringify({name:GF,parents:['appDataFolder']})+'\r\n--'+bd+'\r\nContent-Type: application/json\r\n\r\n'+body+'\r\n--'+bd+'--';
+ var r=await gapi('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id','POST',mp,'multipart/related; boundary='+bd);return (await r.json()).id}
+function gsync(){
+ gm('Łączenie z Dyskiem Google…');
+ var p=(window.google&&google.accounts)?gtok():gload().then(gtok);
+ p.then(async function(){
+  var id=await gfind(),rem=id?await gget(id):null,lm=parseInt(localStorage.getItem('wtm'),10)||0,sy=GL.syn||0,lc=lm!==sy,rc=!!rem&&rem.mod!==sy;
+  if(!rem){var m=lm||Date.now();await gput(id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Wysłano dane na Dysk Google.');return}
+  if(!rc&&!lc){gfin(sy);gm('Już zsynchronizowane.');return}
+  if(rc&&!lc){gapply(rem.d);gfin(rem.mod);gm('Pobrano nowsze dane z Dysku Google.');return}
+  if(!rc&&lc){await gput(id,{mod:lm,d:{S:S,CF:CF}});gfin(lm);gm('Wysłano zmiany na Dysk Google.');return}
+  GP={id:id,rem:rem};$('mg').classList.add('on');gm('Wykryto zmiany po obu stronach.')
+ }).catch(function(e){gm('Błąd: '+((e&&e.message)||e))})}
+$('gde').checked=GL.on;$('gdc').style.display=GL.on?'block':'none';$('gid').value=GL.cid||'';
+if(GL.at)gm('Ostatnia synchronizacja: '+fdt(GL.at).slice(0,16));
+if(GL.on)gload().catch(function(){});
+$('gde').onchange=function(){GL.on=this.checked;gsv();$('gdc').style.display=GL.on?'block':'none';if(GL.on)gload().catch(function(){})};
+$('gid').onchange=function(){GL.cid=this.value.trim();gsv()};
+$('gsy').onclick=gsync;
+$('gdi').onclick=function(){try{if(GT&&window.google&&google.accounts&&google.accounts.oauth2)google.accounts.oauth2.revoke(GT)}catch(e){}GT=null;GTE=0;GL.syn=0;GL.at=0;gsv();gm('Rozłączono. Plik na Dysku został (usuniesz go w ustawieniach Dysku Google).')};
+$('gun').onclick=function(){try{var pv=JSON.parse(localStorage.getItem('wtprev'));if(!pv||!pv.CF)throw 0;S=pv.S||[];CF=pv.CF;cfix();save();saveC();$('nh').value=CF.norm;wdr();render();gm('Przywrócono dane sprzed ostatniej synchronizacji. Kolejna synchronizacja wyśle je na Dysk.')}catch(e){gm('Brak zapisanej kopii do przywrócenia.')}};
+$('gkc').onclick=function(){GP=null;$('mg').classList.remove('on');gm('Anulowano.')};
+$('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{gapply(q.rem.d);gfin(q.rem.mod);gm('Zastąpiono dane tego urządzenia danymi z Dysku.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
+$('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
+$('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 var VER=[
+{v:'2.1',n:'Panel opcji',d:'20.11.2026',c:['Kopie zapasowe, wersja i historia zmian przeniesione do panelu pod ikoną trybika w zakładce Raport']},
 {v:'2.0',n:'Wersje',d:'19.11.2026',c:['Nazwa wersji i historia zmian na dole zakładki Raport']},
 {v:'1.9',n:'Poprawki i kolory',d:'19.11.2026',c:['Naprawiony przycisk „Dodaj święto” (zdublowany identyfikator pola)','Naprawione znikanie danych na zakładkach po rozwinięciu kalendarza (kolizja nazw klas)','Święta w kalendarzu oznaczone na różowo']},
 {v:'1.8',n:'Liquid Glass',d:'19.11.2026',c:['Nowy wygląd: szkło, rozmycie tła, pływające dolne menu','Dolne menu jak slider: przesuwająca się pigułka i przeciąganie palcem po pasku']},
@@ -297,8 +359,8 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){var cur=VER[0];
- if($('ofa'))cur.c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
+(function(){if($('gdc'))VER.unshift({v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+ if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
  $('vbt').onclick=function(){var o=$('vlg').style.display==='none';$('vlg').style.display=o?'block':'none';$('vbt').textContent='Historia zmian '+(o?'▴':'▾')};
