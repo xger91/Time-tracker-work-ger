@@ -202,7 +202,9 @@ $('gkc').onclick=function(){GP=null;$('mg').classList.remove('on');gm('Anulowano
 $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{gapply(q.rem.d);gfin(q.rem.mod);gm('Zastąpiono dane tego urządzenia danymi z Dysku.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
+var APP_BUILD='2.9';
 var VER=[
+{v:'2.7',n:'Stały pulpit i sprawdzanie wersji',d:'20.11.2026',c:['Przywrócono stały widok kółek urlopu/godzin oraz karty Kalendarz u góry ekranu','Dodano przycisk „Sprawdź aktualizacje” w Opcjach z możliwością natychmiastowego pobrania nowej wersji','Dodano subtelną informację o numerze wersji i buildzie na samym dole po prawej stronie']},
 {v:'2.6',n:'Blokada zoomu',d:'20.11.2026',c:['Wyłączone powiększanie widoku dwoma palcami (pinch-to-zoom) na iOS i Androidzie przy zachowaniu normalnego przewijania i wysuwania pulpitu']},
 {v:'2.5',n:'Wysuwany pulpit i czcionka v2.2',d:'20.11.2026',c:['Kółka urlopu/godzin i kalendarz domyślnie ukryte — wysuwają się po pociągnięciu ekranu w dół','Przywrócono dokładny krój i interlinię czcionek systemowych z wersji 2.2','Dodano app.js do pamięci podręcznej trybu offline']},
 {v:'2.4',n:'PWA na iPhone’a',d:'20.11.2026',c:['Instrukcja dodawania aplikacji do ekranu głównego','Automatyczne przygotowanie do pracy offline po otwarciu z ikony, z możliwością wyłączenia','Sprawdzanie zapisanych plików offline i lepsze dopasowanie okien do ekranu iPhone’a']},
@@ -220,9 +222,10 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(4,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(5,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
- $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
+ $('vnm').textContent='Wersja '+cur.v+' · '+cur.n+' (build '+APP_BUILD+')';
+ if($('bld'))$('bld').textContent='v'+cur.v+' · build '+APP_BUILD;
  $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
  $('vbt').onclick=function(){var o=$('vlg').style.display==='none';$('vlg').style.display=o?'block':'none';$('vbt').textContent='Historia zmian '+(o?'▴':'▾')};
 })();
@@ -331,7 +334,7 @@ function msg(t){$('msg').textContent=t}
 var appMode=navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
 if(!appMode&&/iPhone|iPad|iPod/.test(navigator.userAgent))$('install').hidden=false;
 var swScope=new URL('./',document.baseURI),swScript=new URL('sw.js',swScope).href;
-var swPrefix='czas-pracy-pwa:'+swScope.pathname+':',swCache=swPrefix+'2.8';
+var swPrefix='czas-pracy-pwa:'+swScope.pathname+':',swCache=swPrefix+APP_BUILD;
 var swFiles=['./','index.html','app.js','manifest.json','icon.svg','icon-180.png'];
 var swLibs=Array.from(document.querySelectorAll('head script[src]'),function(s){return s.src});
 var swBusy=false;
@@ -403,6 +406,58 @@ async function swStart(){
  }catch(e){swStatus('Tryb offline jest niedostępny w tym widoku.')}
 }
 swStart();
+if($('vck'))$('vck').onclick=async function(){
+ var btn=$('vck'),up=$('vup'),st=$('vst');
+ if(!navigator.onLine){st.textContent='Brak połączenia z internetem — nie można sprawdzić aktualizacji.';return}
+ btn.disabled=true;up.style.display='none';st.textContent='Sprawdzam dostępność nowej wersji…';
+ try{
+  var reg=swCan()?await swOwn():null;
+  if(reg)await reg.update().catch(function(){});
+  var remoteBuild=null;
+  try{
+   var res=await fetch(new URL('sw.js?t='+Date.now(),swScope).href,{cache:'no-store'});
+   if(res&&res.ok){
+    var txt=await res.text();
+    var m=/prefix\s*\+\s*['"]([^'"]+)['"]/.exec(txt);
+    if(m)remoteBuild=m[1];
+   }
+  }catch(e){}
+  var hasUpdate=Boolean((reg&&(reg.waiting||reg.installing))||(remoteBuild&&remoteBuild!==APP_BUILD));
+  if(hasUpdate){
+   st.textContent='Dostępna nowa wersja'+(remoteBuild?' (build '+remoteBuild+')':'')+'! Kliknij „Zainstaluj nową wersję”, aby odświeżyć.';
+   up.style.display='';
+  }else{
+   st.textContent='Masz najnowszą wersję aplikacji (v'+VER[0].v+' · build '+APP_BUILD+').';
+  }
+ }catch(e){
+  st.textContent='Nie udało się sprawdzić aktualizacji. Spróbuj ponownie za chwilę.';
+ }finally{
+  btn.disabled=false;
+ }
+};
+if($('vup'))$('vup').onclick=async function(){
+ var up=$('vup'),st=$('vst');
+ up.disabled=true;st.textContent='Pobieram i instaluję nową wersję…';
+ try{
+  if(swCan()&&swPref()!=='off'){
+   var reg=await swOwn();
+   if(reg){
+    await reg.update().catch(function(){});
+    var w=reg.installing||reg.waiting;
+    if(w&&w.state!=='activated'){
+     await new Promise(function(resolve){
+      var t=setTimeout(resolve,4000);
+      w.addEventListener('statechange',function(){if(w.state==='activated'){clearTimeout(t);resolve()}});
+     });
+    }
+   }
+  }
+  await Promise.all(['./','index.html','app.js','manifest.json'].map(function(p){
+   return fetch(new URL(p,swScope).href,{cache:'reload'}).catch(function(){});
+  }));
+ }catch(e){}
+ window.location.reload();
+};
 async function dlFallback(name,data){
  var ty=name.slice(-4)==='.pdf'?'application/pdf':name.slice(-5)==='.json'?'application/json':name.slice(-5)==='.xlsx'?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'text/csv';
  var blob=data instanceof Blob?data:new Blob([data],{type:ty});
@@ -445,37 +500,7 @@ $('fi').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.tex
  save();render();
  msg('Wczytano pełną kopię: wpisy '+S.length+', urlopy '+CF.vac.length+', święta '+CF.hol.length+', odbiory '+CF.off.length+'.')
 }catch(e){msg('Nieprawidłowy plik kopii.')}})};
-var tpOpen=false,tpY0=null,tpX0=null,tpTop=false;
-function setTP(open){
- tpOpen=!!open;
- var tp=$('tp'),tph=$('tph');
- if(tp)tp.classList.toggle('open',tpOpen);
- if(tph)tph.setAttribute('aria-expanded',tpOpen?'true':'false');
-}
-if($('tph'))$('tph').onclick=function(){setTP(!tpOpen)};
 document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
 document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
 document.addEventListener('touchmove',function(e){if(e.touches.length>1)e.preventDefault()},{passive:false});
-document.addEventListener('touchstart',function(e){
- if(e.touches.length!==1){tpY0=null;return}
- var t=e.target;
- if(t&&t.closest('nav,input,select,textarea,#md.on,#mc.on,#mx.on,#mq.on,#mo.on,#mg.on')){tpY0=null;return}
- tpY0=e.touches[0].clientY;
- tpX0=e.touches[0].clientX;
- tpTop=(window.scrollY||document.documentElement.scrollTop||0)<=2;
-},{passive:true});
-document.addEventListener('touchmove',function(e){
- if(tpY0===null||e.touches.length!==1)return;
- var dy=e.touches[0].clientY-tpY0,dx=e.touches[0].clientX-tpX0;
- if(Math.abs(dx)>Math.abs(dy))return;
- if(!tpOpen&&tpTop&&dy>42){setTP(true);tpY0=null}
- else if(tpOpen&&dy<-42){setTP(false);tpY0=null}
-},{passive:true});
-document.addEventListener('touchend',function(){tpY0=null},{passive:true});
-window.addEventListener('wheel',function(e){
- if(document.querySelector('#md.on,#mc.on,#mx.on,#mq.on,#mo.on,#mg.on'))return;
- var st=window.scrollY||document.documentElement.scrollTop||0;
- if(!tpOpen&&st<=0&&e.deltaY<-35)setTP(true);
- else if(tpOpen&&e.deltaY>45&&e.target&&e.target.closest('#tp'))setTP(false);
-},{passive:true});
 render();

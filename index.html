@@ -492,54 +492,23 @@ nav button.on {
   margin: 4px 0 10px;
 }
 
-#tph {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 22px;
-  margin: -6px 0 2px;
-  padding: 0;
-  border: 0;
-  background: none;
-}
-#tph::before {
-  content: "";
-  width: 38px;
-  height: 4px;
-  border-radius: 999px;
-  background: var(--mut);
-  opacity: 0.35;
-  transition: opacity 0.2s, width 0.2s;
-}
-#tph[aria-expanded="true"]::before {
-  width: 52px;
-  opacity: 0.6;
-}
-#tp {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  margin: 0;
-  pointer-events: none;
-  transition: max-height 0.32s cubic-bezier(0.25, 0.9, 0.3, 1), opacity 0.22s ease, margin 0.24s ease;
-}
-#tp.open {
-  max-height: 540px;
-  opacity: 1;
-  margin-bottom: 6px;
-  pointer-events: auto;
+#bld {
+  margin: 14px 4px 0;
+  text-align: right;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--mut);
+  opacity: 0.55;
+  user-select: none;
 }
 button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
 </style>
 </head>
 <body>
 <main>
-<button id="tph" type="button" aria-label="Pokaż lub ukryj pulpit" aria-expanded="false"></button>
-<div id="tp">
-<div id="chd" style="display:flex;justify-content:center;gap:16px;margin:4px 0 10px"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
+<div id="chd" style="display:flex;justify-content:center;gap:16px;margin:4px 0 6px"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
 <div class="card" style="padding:0;margin-bottom:10px"><button id="kb" style="width:100%;display:flex;justify-content:space-between;background:none;border:0;padding:12px 14px;font-weight:600"><span>Kalendarz</span><span id="ka">▾</span></button><div id="kc" style="display:none;padding:0 12px 12px"></div></div>
-</div>
 <section class="v on" id="v0">
  <div class="card mut" id="install" hidden><strong>Dodaj aplikację na iPhonie</strong><br>W Safari wybierz Udostępnij → Do ekranu głównego. Jeśli zobaczysz opcję „Otwórz jako aplikację www”, włącz ją i stuknij „Dodaj”. Pierwszy raz otwórz aplikację z ikony, gdy masz internet.</div>
  <h2>Dziś</h2>
@@ -588,6 +557,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <div class="card"><label class="mut">Saldo początkowe (godziny, może być ujemne)</label><input type="number" id="op" step="0.25" inputmode="decimal"></div>
  <h2>Odebrane godziny</h2><div class="card" id="ol"></div>
 </section>
+<div id="bld" aria-label="Wersja kompilacji"></div>
 </main>
 <nav><div id="nv"></div><button class="on" data-t="0">Dziś</button><button data-t="1">Historia</button><button data-t="2">Raport</button><button data-t="3">Urlop</button><button data-t="4">Bank</button></nav>
 <div id="mo"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:18px">Opcje</b><button class="btn" id="go">Zamknij</button></div>
@@ -614,7 +584,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <input type="file" id="fi" accept=".json,application/json" hidden>
  <p class="mut" id="msg"></p>
  <h2>Wersja</h2>
- <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b id="vnm"></b><button class="btn" id="vbt">Historia zmian ▾</button></div><div id="vlg" style="display:none;margin-top:12px"></div></div>
+ <div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><b id="vnm"></b><button class="btn" id="vbt">Historia zmian ▾</button></div><div class="gap" style="margin-top:10px;align-items:center"><button class="btn" id="vck">Sprawdź aktualizacje</button><button class="btn p" id="vup" style="display:none">Zainstaluj nową wersję</button></div><div class="mut" id="vst" role="status" style="margin-top:8px;font-size:13px"></div><div id="vlg" style="display:none;margin-top:12px"></div></div>
 </div></div>
 <div id="mg"><div class="card"><b>Zmiany po obu stronach</b><div class="mut" style="margin:6px 0 12px">Dane na tym urządzeniu i na Dysku Google różnią się. Co zachować?</div><div style="display:grid;gap:8px"><button class="btn p" id="gkm">Połącz (dopisz brakujące z obu stron)</button><button class="btn" id="gkl">Zachowaj dane z tego urządzenia</button><button class="btn" id="gkr">Zachowaj dane z Dysku Google</button><button class="btn" id="gkc">Anuluj</button></div><div class="mut" style="font-size:13px;margin-top:8px">Przy łączeniu usunięte wcześniej wpisy mogą wrócić. Przed zmianą apka zapisuje kopię, którą przywrócisz przyciskiem „Cofnij ostatnią synchronizację”.</div></div></div>
 <div id="mq"><div class="card"><b>Zastąpić dane danymi z pliku?</b><div class="mut" id="qt" style="margin:6px 0 12px"></div><div class="gap"><button class="btn p" id="qy">Zastąp dane</button><button class="btn" id="qn">Anuluj</button></div></div></div>
