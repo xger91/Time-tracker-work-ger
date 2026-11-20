@@ -1,6 +1,6 @@
 var scope = new URL(self.registration.scope);
 var prefix = 'czas-pracy-pwa:' + scope.pathname + ':';
-var cacheName = prefix + '2.4';
+var cacheName = prefix + '2.5';
 var core = ['./', 'index.html', 'manifest.json', 'icon.svg', 'icon-180.png'].map(function (path) {
   return new URL(path, scope).href;
 });
