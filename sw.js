@@ -1,5 +1,5 @@
-var C='czas-pracy-v1';
-var CORE=['./','index.html'];
+var C='czas-pracy-v2';
+var CORE=['./','index.html','manifest.json','icon.svg','icon-180.png'];
 var LIBS=['https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js','https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js'];
 self.addEventListener('install',function(e){
  e.waitUntil(caches.open(C).then(function(c){

@@ -1,0 +1,26 @@
+{
+  "name": "Czas pracy",
+  "short_name": "Czas pracy",
+  "description": "Rejestracja czasu pracy, urlopów i banku godzin",
+  "lang": "pl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f6f6f3",
+  "theme_color": "#1f7a4d",
+  "icons": [
+    {
+      "src": "icon-180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

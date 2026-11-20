@@ -3,6 +3,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Czas pracy">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1f7a4d" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141413" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <title>Czas pracy</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -76,7 +82,7 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
 <div class="card" style="padding:0;margin-bottom:10px"><button id="kb" style="width:100%;display:flex;justify-content:space-between;background:none;border:0;padding:12px 14px;font-weight:600"><span>Kalendarz</span><span id="ka">▾</span></button><div id="kc" style="display:none;padding:0 12px 12px"></div></div>
 <section class="v on" id="v0">
  <h2>Dziś</h2>
- <div class="card"><div class="mut">Przepracowano dzisiaj</div><div class="tot" id="tt">0 h 00 min</div><div class="mut" id="st"></div></div>
+ <div class="card"><div class="mut">Przepracowano dzisiaj</div><div class="tot" id="tt">0 h 00 min</div><div class="mut" id="st"></div><div id="ow" style="display:none;margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(192,57,43,.14);border:1px solid var(--red);font-size:14px"></div></div>
  <button class="big" id="bg"></button>
  <button class="btn" id="cu" style="width:100%;margin-top:10px"></button>
  <div class="card" style="display:flex;gap:8px;align-items:center;padding:10px;margin-top:10px"><input type="date" id="dd" style="flex:1;margin:0;min-width:0"><button id="dx" aria-label="Oznacz dzień" title="Oznacz dzień" style="width:44px;height:44px;flex:none;border:0;border-radius:50%;background:var(--ac);color:var(--on);font-size:20px;line-height:1;padding:0">📅</button></div>
@@ -135,6 +141,7 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
  <p class="mut" style="font-size:13px;margin:8px 0 0">Dane trafiają do ukrytego folderu aplikacji na Twoim Dysku Google, do którego dostęp ma tylko ta apka. Dopóki nie włączysz opcji, nic nie jest wysyłane i nie ładuje się żaden skrypt Google.</p></div>
  <h2>Kopia zapasowa</h2>
  <div class="gap"><button class="btn" id="bk">Zapisz kopię (JSON)</button><button class="btn" id="im">Wczytaj kopię</button></div>
+ <p class="mut" style="font-size:13px">Kopia JSON zapisuje pełny stan aplikacji: wpisy, urlopy, święta, odbiory godzin i ustawienia.</p>
  <div class="gap" style="margin-top:8px"><button class="btn p" id="bc">Backup CSV: eksport</button><button class="btn" id="ic">Backup CSV: import</button></div>
  <input type="file" id="fc" accept=".csv,text/csv,text/plain" hidden>
  <p class="mut" style="font-size:13px">Backup CSV zawiera całą historię: wpisy, urlopy, święta, odbiory godzin i ustawienia. Import dopisuje brakujące dane (nie kasuje istniejących i nie dubluje). Nie edytuj pliku w Excelu, bo może zmienić format dat.</p>
@@ -346,6 +353,7 @@ $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 var VER=[
+{v:'2.3',n:'Usprawnienia PWA i walidacja',d:'20.11.2026',c:['Pełny backup JSON (wpisy, urlopy, święta, odbiory godzin i ustawienia)','Walidacja nakładających się wpisów przy dodawaniu i edycji w Historii','Ostrzeżenie na ekranie Dziś, gdy otwarta zmiana trwa ponad 12 godzin','Manifest PWA, ikona PNG (180×180) oraz przezroczysty pasek statusu pod iOS']},
 {v:'2.1',n:'Panel opcji',d:'20.11.2026',c:['Kopie zapasowe, wersja i historia zmian przeniesione do panelu pod ikoną trybika w zakładce Raport']},
 {v:'2.0',n:'Wersje',d:'19.11.2026',c:['Nazwa wersji i historia zmian na dole zakładki Raport']},
 {v:'1.9',n:'Poprawki i kolory',d:'19.11.2026',c:['Naprawiony przycisk „Dodaj święto” (zdublowany identyfikator pola)','Naprawione znikanie danych na zakładkach po rozwinięciu kalendarza (kolizja nazw klas)','Święta w kalendarzu oznaczone na różowo']},
@@ -359,7 +367,7 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.unshift({v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(1,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
@@ -413,6 +421,12 @@ function render(){
  var o=opn(),td=dk(Date.now()),ts=S.filter(function(x){return dk(x.s)===td}).sort(function(a,b){return a.s-b.s});
  $('tt').textContent=dur(sum(ts));vren();hren();bren();
  $('st').textContent=o?'W pracy od '+tm(o.s):(isH(td)?'Święto: wejście zablokowane':CF.vac.indexOf(td)>=0?'Dziś urlop':'Poza pracą');
+ var ow=$('ow');
+ if(o&&Date.now()-o.s>12*3600000){
+  ow.style.display='block';
+  ow.innerHTML='<div style="color:var(--red);font-weight:600;margin-bottom:6px">⚠️ Otwarta zmiana trwa już '+dur(Date.now()-o.s)+' (od '+dl(dk(o.s))+' '+tm(o.s)+'). Czy zapomniałeś kliknąć Wyjście?</div><button class="btn" id="owb" style="padding:6px 12px;font-size:13px">Ustaw godzinę wyjścia</button>';
+  $('owb').onclick=function(){$('cu').click()};
+ }else{ow.style.display='none';ow.innerHTML=''}
  var b=$('bg');b.textContent=o?'Wyjście':'Wejście';b.className='big'+(o?' out':'');b.disabled=!o&&isH(td);if(b.disabled)b.textContent='Dzień wolny (święto)';$('cu').textContent=o?'Wyjście o innej godzinie':'Wejście o innej godzinie';
  $('tl').innerHTML=ts.length?ts.map(function(x){return '<div class="row" data-id="'+x.id+'" style="cursor:pointer"><span>'+tm(x.s)+' – '+(x.e?tm(x.e):'trwa')+'</span><span class="mut">'+dur(len(x))+'</span></div>'}).join(''):'<span class="mut">Brak wpisów</span>';
  var g=days($('m1').value),ks=Object.keys(g).sort().reverse(),pm='',MN=['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
@@ -447,6 +461,9 @@ $('sv').onclick=function(){
  if(isH(dk(s))){$('er').textContent='Ten dzień jest oznaczony jako święto';return}
  if(e&&e<=s){$('er').textContent='Wyjście musi być po wejściu';return}
  var o=opn();if(!e&&o&&o.id!==eid){$('er').textContent='Masz już otwarte wejście';return}
+ var eEff=e||Math.max(Date.now(),s+1);
+ var ov=S.find(function(x){return x.id!==eid&&s<(x.e||Math.max(Date.now(),x.s+1))&&eEff>x.s});
+ if(ov){$('er').textContent='Wpis nakłada się na inny wpis ('+dl(dk(ov.s))+' '+tm(ov.s)+' – '+(ov.e?tm(ov.e):'trwa')+')';return}
  if(eid){var x=S.find(function(y){return y.id===eid});x.s=s;x.e=e}else S.push({id:Date.now().toString(36),s:s,e:e});
  save();$('md').classList.remove('on');render()};
 $('cu').onclick=function(){var o=opn();$('ct').textContent=o?'Wyjście: wybierz datę i godzinę':'Wejście: wybierz datę i godzinę';$('cv').value=lv(Date.now());$('ce').textContent='';$('mc').classList.add('on')};
@@ -458,7 +475,7 @@ $('cs').onclick=function(){var v=$('cv').value;if(!v){$('ce').textContent='Wybie
  else{if(isH(dk(t))){$('ce').textContent='Ten dzień jest oznaczony jako święto';return}if(S.some(function(x){return x.s>t||(x.e&&t<x.e)})){$('ce').textContent='Ta godzina koliduje z innymi wpisami. Użyj Historia → Dodaj wpis ręcznie.';return}S.push({id:Date.now().toString(36),s:t,e:null})}
  save();$('mc').classList.remove('on');render()};
 function msg(t){$('msg').textContent=t}
-var SWN='czas-pracy-v1';
+var SWN='czas-pracy-v2';
 async function ofst(){
  if(!('serviceWorker' in navigator)||!window.caches){$('ofs').textContent='Ta przeglądarka nie obsługuje trybu offline.';return}
  try{var regs=await navigator.serviceWorker.getRegistrations(),has=await caches.has(SWN);
@@ -509,8 +526,15 @@ $('pdf').onclick=function(){
  doc.text('Saldo do normy: '+sh(st.ot)+' h',15,y);y+=7;
  doc.text('Nadgodziny ponad norme dzienna: '+hm(ovt(st))+' h',15,y);y+=7;doc.text('Urlop: '+cnt(P,CF.vac)+' dni, swieta: '+cnt(P,CF.hol)+' dni',15,y);
  out('czas-pracy-'+P.fn+'.pdf',doc.output('blob'))};
-$('bk').onclick=function(){out('czas-pracy-kopia.json',JSON.stringify(S))};
+$('bk').onclick=function(){out('czas-pracy-kopia-'+dk(Date.now())+'.json',JSON.stringify({v:1,exportedAt:new Date().toISOString(),S:S,CF:CF}))};
 $('im').onclick=function(){$('fi').click()};
-$('fi').onchange=function(){var f=this.files[0];if(!f)return;f.text().then(function(t){try{var a=JSON.parse(t);if(!Array.isArray(a))throw 0;S=a;save();render();msg('Wczytano '+a.length+' wpisów.')}catch(e){msg('Nieprawidłowy plik kopii.')}})};
+$('fi').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.text().then(function(t){try{var d=JSON.parse(t);
+ if(Array.isArray(d)){S=d;save();render();msg('Wczytano '+d.length+' wpisów (starszy format kopii).');return}
+ if(!d||typeof d!=='object'||!Array.isArray(d.S))throw 0;
+ S=d.S;
+ if(d.CF&&typeof d.CF==='object'){CF=d.CF;cfix();saveC();$('nh').value=CF.norm;wdr()}
+ save();render();
+ msg('Wczytano pełną kopię: wpisy '+S.length+', urlopy '+CF.vac.length+', święta '+CF.hol.length+', odbiory '+CF.off.length+'.')
+}catch(e){msg('Nieprawidłowy plik kopii.')}})};
 render();
 </script></body></html>
