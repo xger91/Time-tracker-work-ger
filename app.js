@@ -203,6 +203,7 @@ $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 var VER=[
+{v:'2.5',n:'Wysuwany pulpit i czcionka v2.2',d:'20.11.2026',c:['Kółka urlopu/godzin i kalendarz domyślnie ukryte — wysuwają się po pociągnięciu ekranu w dół','Przywrócono dokładny krój i interlinię czcionek systemowych z wersji 2.2','Dodano app.js do pamięci podręcznej trybu offline']},
 {v:'2.4',n:'PWA na iPhone’a',d:'20.11.2026',c:['Instrukcja dodawania aplikacji do ekranu głównego','Automatyczne przygotowanie do pracy offline po otwarciu z ikony, z możliwością wyłączenia','Sprawdzanie zapisanych plików offline i lepsze dopasowanie okien do ekranu iPhone’a']},
 {v:'2.3',n:'Usprawnienia PWA i walidacja',d:'20.11.2026',c:['Pełny backup JSON (wpisy, urlopy, święta, odbiory godzin i ustawienia)','Walidacja nakładających się wpisów przy dodawaniu i edycji w Historii','Ostrzeżenie na ekranie Dziś, gdy otwarta zmiana trwa ponad 12 godzin','Manifest PWA, ikona PNG (180×180) oraz przezroczysty pasek statusu pod iOS']},
 {v:'2.1',n:'Panel opcji',d:'20.11.2026',c:['Kopie zapasowe, wersja i historia zmian przeniesione do panelu pod ikoną trybika w zakładce Raport']},
@@ -218,7 +219,7 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(2,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(3,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
@@ -329,8 +330,8 @@ function msg(t){$('msg').textContent=t}
 var appMode=navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
 if(!appMode&&/iPhone|iPad|iPod/.test(navigator.userAgent))$('install').hidden=false;
 var swScope=new URL('./',document.baseURI),swScript=new URL('sw.js',swScope).href;
-var swPrefix='czas-pracy-pwa:'+swScope.pathname+':',swCache=swPrefix+'2.5';
-var swFiles=['./','index.html','manifest.json','icon.svg','icon-180.png'];
+var swPrefix='czas-pracy-pwa:'+swScope.pathname+':',swCache=swPrefix+'2.7';
+var swFiles=['./','index.html','app.js','manifest.json','icon.svg','icon-180.png'];
 var swLibs=Array.from(document.querySelectorAll('head script[src]'),function(s){return s.src});
 var swBusy=false;
 function swPref(on){
@@ -443,5 +444,34 @@ $('fi').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.tex
  save();render();
  msg('Wczytano pełną kopię: wpisy '+S.length+', urlopy '+CF.vac.length+', święta '+CF.hol.length+', odbiory '+CF.off.length+'.')
 }catch(e){msg('Nieprawidłowy plik kopii.')}})};
+var tpOpen=false,tpY0=null,tpX0=null,tpTop=false;
+function setTP(open){
+ tpOpen=!!open;
+ var tp=$('tp'),tph=$('tph');
+ if(tp)tp.classList.toggle('open',tpOpen);
+ if(tph)tph.setAttribute('aria-expanded',tpOpen?'true':'false');
+}
+if($('tph'))$('tph').onclick=function(){setTP(!tpOpen)};
+document.addEventListener('touchstart',function(e){
+ if(e.touches.length!==1)return;
+ var t=e.target;
+ if(t&&t.closest('nav,input,select,textarea,#md.on,#mc.on,#mx.on,#mq.on,#mo.on,#mg.on')){tpY0=null;return}
+ tpY0=e.touches[0].clientY;
+ tpX0=e.touches[0].clientX;
+ tpTop=(window.scrollY||document.documentElement.scrollTop||0)<=2;
+},{passive:true});
+document.addEventListener('touchmove',function(e){
+ if(tpY0===null||e.touches.length!==1)return;
+ var dy=e.touches[0].clientY-tpY0,dx=e.touches[0].clientX-tpX0;
+ if(Math.abs(dx)>Math.abs(dy))return;
+ if(!tpOpen&&tpTop&&dy>42){setTP(true);tpY0=null}
+ else if(tpOpen&&dy<-42){setTP(false);tpY0=null}
+},{passive:true});
+document.addEventListener('touchend',function(){tpY0=null},{passive:true});
+window.addEventListener('wheel',function(e){
+ if(document.querySelector('#md.on,#mc.on,#mx.on,#mq.on,#mo.on,#mg.on'))return;
+ var st=window.scrollY||document.documentElement.scrollTop||0;
+ if(!tpOpen&&st<=0&&e.deltaY<-35)setTP(true);
+ else if(tpOpen&&e.deltaY>45&&e.target&&e.target.closest('#tp'))setTP(false);
+},{passive:true});
 render();
-
