@@ -75,12 +75,14 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
 #nv{position:absolute;top:5px;bottom:5px;left:5px;width:calc((100% - 10px)/5);border-radius:28px;background:rgba(127,127,127,.2);border:1px solid var(--bd);box-shadow:0 2px 10px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.6);transition:transform .38s cubic-bezier(.3,1.35,.5,1);pointer-events:none}
 #md,#mc,#mx,#mq,#mo,#mg{background:rgba(0,0,0,.25);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 #md .card,#mc .card,#mx .card,#mq .card,#mo .card,#mg .card{background:var(--cs);border-radius:30px 30px 0 0}
-#mo .card{max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+#md .card,#mc .card,#mx .card,#mq .card,#mo .card,#mg .card{max-height:88vh;max-height:88dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+#install{line-height:1.45}#ofs{margin-bottom:8px}
 </style></head><body>
 <main>
 <div id="chd" style="display:flex;justify-content:center;gap:16px;margin:4px 0 6px"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
 <div class="card" style="padding:0;margin-bottom:10px"><button id="kb" style="width:100%;display:flex;justify-content:space-between;background:none;border:0;padding:12px 14px;font-weight:600"><span>Kalendarz</span><span id="ka">▾</span></button><div id="kc" style="display:none;padding:0 12px 12px"></div></div>
 <section class="v on" id="v0">
+ <div class="card mut" id="install" hidden><strong>Dodaj aplikację na iPhonie</strong><br>W Safari wybierz Udostępnij → Do ekranu głównego. Jeśli zobaczysz opcję „Otwórz jako aplikację www”, włącz ją i stuknij „Dodaj”. Pierwszy raz otwórz aplikację z ikony, gdy masz internet.</div>
  <h2>Dziś</h2>
  <div class="card"><div class="mut">Przepracowano dzisiaj</div><div class="tot" id="tt">0 h 00 min</div><div class="mut" id="st"></div><div id="ow" style="display:none;margin-top:10px;padding:10px 12px;border-radius:14px;background:rgba(192,57,43,.14);border:1px solid var(--red);font-size:14px"></div></div>
  <button class="big" id="bg"></button>
@@ -129,7 +131,7 @@ nav{touch-action:none;-webkit-user-select:none;user-select:none}
 <nav><div id="nv"></div><button class="on" data-t="0">Dziś</button><button data-t="1">Historia</button><button data-t="2">Raport</button><button data-t="3">Urlop</button><button data-t="4">Bank</button></nav>
 <div id="mo"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:18px">Opcje</b><button class="btn" id="go">Zamknij</button></div>
  <h2>Tryb offline</h2>
- <div class="card"><div class="mut" id="ofs">Sprawdzam…</div><div class="gap" style="margin-top:8px"><button class="btn p" id="ofa">Zapisz do użycia offline</button><button class="btn d" id="ofr">Usuń zapisane offline</button></div><p class="mut" style="font-size:13px;margin:8px 0 0">Zapisuje pliki apki w pamięci przeglądarki, żeby działała bez internetu. Twoich wpisów to nie dotyczy: usunięcie zapisu offline ich nie kasuje.</p></div>
+ <div class="card"><div class="mut" id="ofs" role="status">Sprawdzam…</div><div class="gap"><button class="btn p" id="ofa">Zapisz do użycia offline</button><button class="btn d" id="ofr">Usuń zapisane offline</button></div><p class="mut" style="font-size:13px;margin:8px 0 0">Po otwarciu z ekranu głównego aplikacja przygotowuje się do pracy offline, o ile tej funkcji nie wyłączysz. Usunięcie plików offline nie kasuje wpisów. Synchronizacja z Dyskiem Google wymaga internetu.</p></div>
  <h2>Synchronizacja z Dyskiem Google</h2>
  <div class="card"><label style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="gde" style="width:22px;height:22px"><span>Włącz synchronizację (opcjonalna)</span></label>
  <div id="gdc" style="display:none;margin-top:10px">
@@ -353,6 +355,7 @@ $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 var VER=[
+{v:'2.4',n:'PWA na iPhone’a',d:'20.11.2026',c:['Instrukcja dodawania aplikacji do ekranu głównego','Automatyczne przygotowanie do pracy offline po otwarciu z ikony, z możliwością wyłączenia','Sprawdzanie zapisanych plików offline i lepsze dopasowanie okien do ekranu iPhone’a']},
 {v:'2.3',n:'Usprawnienia PWA i walidacja',d:'20.11.2026',c:['Pełny backup JSON (wpisy, urlopy, święta, odbiory godzin i ustawienia)','Walidacja nakładających się wpisów przy dodawaniu i edycji w Historii','Ostrzeżenie na ekranie Dziś, gdy otwarta zmiana trwa ponad 12 godzin','Manifest PWA, ikona PNG (180×180) oraz przezroczysty pasek statusu pod iOS']},
 {v:'2.1',n:'Panel opcji',d:'20.11.2026',c:['Kopie zapasowe, wersja i historia zmian przeniesione do panelu pod ikoną trybika w zakładce Raport']},
 {v:'2.0',n:'Wersje',d:'19.11.2026',c:['Nazwa wersji i historia zmian na dole zakładki Raport']},
@@ -367,7 +370,7 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(1,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(2,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
@@ -475,25 +478,83 @@ $('cs').onclick=function(){var v=$('cv').value;if(!v){$('ce').textContent='Wybie
  else{if(isH(dk(t))){$('ce').textContent='Ten dzień jest oznaczony jako święto';return}if(S.some(function(x){return x.s>t||(x.e&&t<x.e)})){$('ce').textContent='Ta godzina koliduje z innymi wpisami. Użyj Historia → Dodaj wpis ręcznie.';return}S.push({id:Date.now().toString(36),s:t,e:null})}
  save();$('mc').classList.remove('on');render()};
 function msg(t){$('msg').textContent=t}
-var SWN='czas-pracy-v2';
-async function ofst(){
- if(!('serviceWorker' in navigator)||!window.caches){$('ofs').textContent='Ta przeglądarka nie obsługuje trybu offline.';return}
- try{var regs=await navigator.serviceWorker.getRegistrations(),has=await caches.has(SWN);
-  $('ofs').textContent=has&&regs.length?'Zapisano offline: tak. Apka może działać bez internetu.':'Zapisano offline: nie.'}
- catch(e){$('ofs').textContent='Stan trybu offline jest niedostępny w tym widoku.'}}
-$('ofa').onclick=async function(){
- if(!('serviceWorker' in navigator)||!window.caches){msg('Ta przeglądarka nie obsługuje trybu offline.');return}
- $('ofs').textContent='Zapisuję…';
- try{await navigator.serviceWorker.register('sw.js');await navigator.serviceWorker.ready;
-  for(var i=0;i<20&&!(await caches.has(SWN));i++)await new Promise(function(r){setTimeout(r,250)});
-  try{if(navigator.storage&&navigator.storage.persist)await navigator.storage.persist()}catch(e){}
- }catch(e){$('ofs').textContent='Nie udało się zapisać. Ta funkcja działa tylko na własnej stronie (https), np. GitHub Pages, i wymaga pliku sw.js obok index.html.';return}
- ofst()};
+var appMode=navigator.standalone===true||matchMedia('(display-mode: standalone)').matches;
+if(!appMode&&/iPhone|iPad|iPod/.test(navigator.userAgent))$('install').hidden=false;
+var swScope=new URL('./',document.baseURI),swScript=new URL('sw.js',swScope).href;
+var swPrefix='czas-pracy-pwa:'+swScope.pathname+':',swCache=swPrefix+'2.4';
+var swFiles=['./','index.html','manifest.json','icon.svg','icon-180.png'];
+var swLibs=Array.from(document.querySelectorAll('head script[src]'),function(s){return s.src});
+var swBusy=false;
+function swPref(on){
+ try{if(typeof on==='boolean')localStorage.setItem('wt-offline:'+swScope.pathname,on?'on':'off');
+ return localStorage.getItem('wt-offline:'+swScope.pathname)}catch(e){return null}
+}
+function swCan(){return window.isSecureContext&&'serviceWorker' in navigator&&'caches' in window}
+function swStatus(t){$('ofs').textContent=t}
+function swLock(b){
+ swBusy=b;$('ofa').disabled=$('ofr').disabled=b;
+}
+async function swOwn(){
+ var rs=await navigator.serviceWorker.getRegistrations();
+ return rs.find(function(r){
+  return r.scope===swScope.href&&[r.active,r.installing,r.waiting].some(function(w){return w&&w.scriptURL===swScript})
+ });
+}
+async function swCheck(warm){
+ var r=await swOwn();
+ if(!r||!r.active||!(await caches.has(swCache)))return false;
+ var c=await caches.open(swCache);
+ var check=function(list){return Promise.all(list.map(function(p){return c.match(new URL(p,swScope).href)})).then(function(a){return a.every(Boolean)})};
+ if(!(await check(swFiles)))return false;
+ var hasLibs=await check(swLibs);
+ swStatus('Gotowe do pracy offline.'+(hasLibs?'':' Eksport PDF lub obsługa plików Excel mogą wymagać internetu.'));
+ if(!hasLibs&&warm&&navigator.onLine&&'MessageChannel' in window){
+  var channel=new MessageChannel();
+  var close=function(){channel.port1.close()};
+  var timer=setTimeout(close,10000);
+  channel.port1.onmessage=function(){clearTimeout(timer);close();if(swPref()!=='off')swCheck(false).catch(function(){})};
+  try{r.active.postMessage('cache-export-libraries',[channel.port2])}catch(e){clearTimeout(timer);close()}
+ }
+ return true;
+}
+async function swSetup(manual){
+ if(swBusy||!swCan())return;
+ swLock(true);swStatus('Przygotowuję aplikację do pracy offline…');
+ if(manual)swPref(true);
+ try{
+  await navigator.serviceWorker.register(swScript,{scope:swScope.href,updateViaCache:'none'});
+  for(var i=0;i<40;i++){
+   if(await swCheck(true)){
+    try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist().catch(function(){})}catch(e){}
+    return;
+   }
+   await new Promise(function(resolve){setTimeout(resolve,250)});
+  }
+  throw new Error('Nie zapisano wszystkich plików');
+ }catch(e){swStatus('Nie udało się przygotować trybu offline. Połącz się z internetem, otwórz aplikację pod jej adresem HTTPS i spróbuj ponownie.')}
+ finally{swLock(false)}
+}
+$('ofa').onclick=function(){swSetup(true)};
 $('ofr').onclick=async function(){
- try{var regs=await navigator.serviceWorker.getRegistrations();for(var i=0;i<regs.length;i++)await regs[i].unregister();
-  var ks=await caches.keys();for(var j=0;j<ks.length;j++)if(ks[j].indexOf('czas-pracy-')===0)await caches.delete(ks[j])}catch(e){}
- ofst()};
-ofst();
+ if(swBusy||!swCan())return;
+ swLock(true);swPref(false);
+ try{
+  var r=await swOwn();if(r)await r.unregister();
+  var ks=await caches.keys();await Promise.all(ks.filter(function(k){return k.indexOf(swPrefix)===0}).map(function(k){return caches.delete(k)}));
+  swStatus('Tryb offline wyłączony. Wpisy nie zostały usunięte.');
+ }catch(e){swStatus('Nie udało się usunąć plików offline. Spróbuj ponownie.')}
+ finally{swLock(false)}
+};
+async function swStart(){
+ if(!swCan()){swLock(true);swStatus('Tryb offline jest niedostępny w tym widoku. Otwórz opublikowaną aplikację bezpośrednio w Safari pod adresem HTTPS.');return}
+ try{
+  if(swPref()==='off'){swStatus('Tryb offline wyłączony.');return}
+  if(await swCheck(true))return;
+  if((appMode||swPref()==='on')&&navigator.onLine){swSetup(false);return}
+  swStatus('Pliki do pracy offline nie zostały jeszcze zapisane.');
+ }catch(e){swStatus('Tryb offline jest niedostępny w tym widoku.')}
+}
+swStart();
 async function dlFallback(name,data){
  var ty=name.slice(-4)==='.pdf'?'application/pdf':name.slice(-5)==='.json'?'application/json':name.slice(-5)==='.xlsx'?'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':'text/csv';
  var blob=data instanceof Blob?data:new Blob([data],{type:ty});

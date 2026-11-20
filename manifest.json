@@ -3,6 +3,7 @@
   "short_name": "Czas pracy",
   "description": "Rejestracja czasu pracy, urlopów i banku godzin",
   "lang": "pl",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
