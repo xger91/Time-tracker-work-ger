@@ -94,6 +94,10 @@ h2 {
   font-weight: 700;
   color: var(--on);
   background: var(--ac);
+  transition: transform 0.18s cubic-bezier(0.3, 1.4, 0.5, 1), background 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
+}
+.big:active:not(:disabled) {
+  transform: scale(0.97);
 }
 .big.out {
   background: var(--red);
@@ -196,6 +200,10 @@ input {
   background: var(--card);
   border-radius: 10px;
   padding: 10px 14px;
+  transition: transform 0.16s cubic-bezier(0.3, 1.4, 0.5, 1), background-color 0.2s ease, border-color 0.2s ease, opacity 0.15s ease;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.95);
 }
 .btn.p {
   background: var(--ac);
@@ -240,11 +248,33 @@ nav button {
 nav button.on {
   color: var(--ac);
 }
+@keyframes vInR {
+  from { opacity: 0; transform: translateX(18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes vInL {
+  from { opacity: 0; transform: translateX(-18px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes calFade {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 .v {
   display: none;
+  will-change: transform, opacity;
 }
 .v.on {
   display: block;
+}
+.v.on.dir-r {
+  animation: vInR 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.v.on.dir-l {
+  animation: vInL 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#kc .cg {
+  animation: calFade 0.2s ease;
 }
 #md,
 #mc,
@@ -255,10 +285,13 @@ nav button.on {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  display: none;
+  display: flex;
   align-items: flex-end;
   justify-content: center;
   z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.24s ease;
 }
 #md.on,
 #mc.on,
@@ -266,7 +299,8 @@ nav button.on {
 #mq.on,
 #mo.on,
 #mg.on {
-  display: flex;
+  opacity: 1;
+  pointer-events: auto;
 }
 #md .card,
 #mc .card,
@@ -279,6 +313,16 @@ nav button.on {
   border-radius: 20px 20px 0 0;
   margin: 0;
   padding: 18px 18px 28px;
+  transform: translateY(36px);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+#md.on .card,
+#mc.on .card,
+#mx.on .card,
+#mq.on .card,
+#mo.on .card,
+#mg.on .card {
+  transform: translateY(0);
 }
 .gap {
   display: flex;
@@ -407,6 +451,30 @@ input[type="text"] {
   box-shadow:
     0 6px 16px rgba(0, 0, 0, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transition: transform 0.16s cubic-bezier(0.3, 1.4, 0.5, 1), box-shadow 0.2s ease;
+}
+#dx:active:not(:disabled) {
+  transform: scale(0.91);
+}
+.row[data-id] {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.row[data-id]:active {
+  transform: scale(0.985);
+  opacity: 0.76;
+}
+#ka {
+  display: inline-block;
+  transition: transform 0.28s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+#kb[aria-expanded="true"] #ka {
+  transform: rotate(180deg);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 nav {
   left: 12px;
@@ -546,7 +614,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
 <body>
 <main>
 <div id="chd" style="display:flex;justify-content:center;gap:16px;margin:4px 0 6px"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
-<div class="card" style="padding:0;margin-bottom:10px"><button id="kb" style="width:100%;display:flex;justify-content:space-between;background:none;border:0;padding:12px 14px;font-weight:600"><span>Kalendarz</span><span id="ka">▾</span></button><div id="kc" style="display:none;padding:0 12px 12px"></div></div>
+<div class="card" style="padding:0;margin-bottom:10px"><button id="kb" type="button" aria-expanded="false" aria-controls="kc" style="width:100%;display:flex;justify-content:space-between;background:none;border:0;padding:12px 14px;font-weight:600"><span>Kalendarz</span><span id="ka">▾</span></button><div id="kc" style="display:none;padding:0 12px 12px"></div></div>
 <section class="v on" id="v0">
  <div class="card mut" id="install" hidden><strong>Dodaj aplikację na iPhonie</strong><br>W Safari wybierz Udostępnij → Do ekranu głównego. Jeśli zobaczysz opcję „Otwórz jako aplikację www”, włącz ją i stuknij „Dodaj”. Pierwszy raz otwórz aplikację z ikony, gdy masz internet.</div>
  <h2>Dziś</h2>

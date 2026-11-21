@@ -202,8 +202,9 @@ $('gkc').onclick=function(){GP=null;$('mg').classList.remove('on');gm('Anulowano
 $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{gapply(q.rem.d);gfin(q.rem.mod);gm('Zastąpiono dane tego urządzenia danymi z Dysku.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
-var APP_BUILD='2.7.3';
+var APP_BUILD='2.7.4';
 var VER=[
+{v:'2.7.4',n:'Animacje i gest przesuwania',d:'21.11.2026',c:['Sprężyste animacje przycisków, wierszy wpisów i głównego przycisku Wejście / Wyjście','Przełączanie zakładek (Dziś, Raport, Portal) gestem przesunięcia palcem w lewo lub w prawo po ekranie','Płynne wysuwanie dolnych okien dialogowych oraz animowane rozwijanie sekcji w Portalu i Kalendarzu']},
 {v:'2.7.3',n:'Zwijane sekcje w Portalu',d:'21.11.2026',c:['Zakładka Portal podzielona na dwie zwijane sekcje: Urlop (z podsumowaniem pozostałych dni) oraz Bank godzin (z aktualnym saldem)','Obie sekcje domyślnie zwinięte po uruchomieniu aplikacji','Dodano ikony 192 i 512 px do pamięci podręcznej trybu offline']},
 {v:'2.7.2',n:'Nowe menu',d:'21.11.2026',c:['Dolne menu ma 3 zakładki: Dziś, Raport i Portal','Historia przeniesiona na dół zakładki Raport','Urlop i Bank godzin połączone w jedną zakładkę Portal (najpierw Urlop, potem Bank)']},
 {v:'2.7.1',n:'Ujednolicenie wersji',d:'21.11.2026',c:['Jeden numer wersji w aplikacji, historii zmian i pamięci offline; usunięty powtarzający się dopisek „build”','Dodane ikony PNG 192 i 512 px oraz poprawiony manifest (ikona SVG jako zwykła)']},
@@ -225,7 +226,7 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(8,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(9,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  if($('bld'))$('bld').textContent='v'+cur.v;
@@ -257,7 +258,37 @@ function kren(){var y=KM.getFullYear(),m=KM.getMonth(),n=new Date(y,m+1,0).getDa
  for(var d=1;d<=n;d++){var k=y+'-'+p2(m+1)+'-'+p2(d),c=(ac[k]?' a':'')+(CF.vac.indexOf(k)>=0?' vc':'')+(isH(k)?' s':'')+(k===td?' t':'');h+='<div class="'+c.trim()+'">'+d+'</div>'}
  h+='</div><div class="mut" style="margin-top:8px;font-size:12px">Zielone koło: był wpis · przerywane: urlop · różowe: święto</div>';
  $('kc').innerHTML=h}
-$('kb').onclick=function(){var o=$('kc').style.display==='none';$('kc').style.display=o?'block':'none';$('ka').textContent=o?'▴':'▾';kren()};
+function togglePanel(b,c,open,pre){
+ if(!b||!c)return;
+ var isOpen=c.style.display!=='none'&&!c.dataset.closing;
+ var o=typeof open==='boolean'?open:!isOpen;
+ b.setAttribute('aria-expanded',o?'true':'false');
+ if(c._t)clearTimeout(c._t);
+ if(o){
+  delete c.dataset.closing;
+  if(pre)pre();
+  c.style.display='block';
+  c.style.overflow='hidden';
+  c.style.maxHeight='0px';
+  c.style.opacity='0';
+  c.offsetHeight;
+  c.style.transition='max-height 0.32s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.24s ease';
+  c.style.maxHeight=c.scrollHeight+'px';
+  c.style.opacity='1';
+  c._t=setTimeout(function(){c.style.maxHeight='';c.style.overflow='';c.style.transition=''},340);
+ }else{
+  c.dataset.closing='1';
+  c.style.overflow='hidden';
+  c.style.maxHeight=c.scrollHeight+'px';
+  c.style.opacity='1';
+  c.offsetHeight;
+  c.style.transition='max-height 0.26s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.18s ease';
+  c.style.maxHeight='0px';
+  c.style.opacity='0';
+  c._t=setTimeout(function(){c.style.display='none';c.style.maxHeight='';c.style.opacity='';c.style.overflow='';c.style.transition='';delete c.dataset.closing},280);
+ }
+}
+$('kb').onclick=function(){togglePanel($('kb'),$('kc'),null,kren)};
 $('kc').onclick=function(ev){var b=ev.target.closest('button');if(!b)return;if(b.id==='kp')KM=new Date(KM.getFullYear(),KM.getMonth()-1,1);else if(b.id==='kn')KM=new Date(KM.getFullYear(),KM.getMonth()+1,1);kren()};
 function hren(){var now=new Date(),y=now.getFullYear(),mo=y+'-'+p2(now.getMonth()+1),t=0,d={};
  S.forEach(function(x){var k=dk(x.s);if(k.indexOf(mo)===0){t+=len(x);d[k]=1}});
@@ -295,17 +326,79 @@ function render(){
 }
 $('bg').onclick=function(){var o=opn();if(!o&&isH(dk(Date.now())))return;if(o)o.e=Date.now();else S.push({id:Date.now().toString(36),s:Date.now(),e:null});save();render()};
 setInterval(function(){if(opn())render()},20000);
-document.querySelectorAll('nav button').forEach(function(b){b.onclick=function(){document.querySelectorAll('nav button').forEach(function(x){x.classList.toggle('on',x===b)});document.querySelectorAll('section.v').forEach(function(v,i){v.classList.toggle('on',i==b.dataset.t)});render()}});
-$('m1').onchange=render;$('m2').onchange=render;$('ma').onclick=function(){$('m1').value='';render()};
-var NB=Array.prototype.slice.call(document.querySelectorAll('nav button')),NI=0,nvd=null,nav=document.querySelector('nav');
+var NB=Array.prototype.slice.call(document.querySelectorAll('nav button')),VS=Array.prototype.slice.call(document.querySelectorAll('section.v')),NI=0,nvd=null,nav=document.querySelector('nav');
 function nvpos(i,px){var n=$('nv');n.style.transition=px==null?'':'none';n.style.transform=px==null?'translateX('+i*100+'%)':'translateX('+px+'px)'}
-NB.forEach(function(b,i){var o=b.onclick;b.onclick=function(){o.call(b);NI=i;if(!(nvd&&nvd.m))nvpos(i)}});
+function goTab(idx,dir){
+ idx=Math.max(0,Math.min(NB.length-1,idx));
+ var prev=NI;
+ if(dir==null)dir=idx>prev?1:idx<prev?-1:0;
+ NI=idx;
+ NB.forEach(function(x,i){x.classList.toggle('on',i===idx)});
+ VS.forEach(function(v,i){
+  v.classList.remove('dir-r','dir-l');
+  v.style.transform='';
+  v.style.transition='';
+  if(i===idx){
+   v.classList.add('on');
+   if(dir){void v.offsetWidth;v.classList.add(dir>0?'dir-r':'dir-l')}
+  }else{
+   v.classList.remove('on');
+  }
+ });
+ if(!(nvd&&nvd.m))nvpos(idx);
+ render();
+}
+NB.forEach(function(b,i){b.onclick=function(){goTab(i)}});
+$('m1').onchange=render;$('m2').onchange=render;$('ma').onclick=function(){$('m1').value='';render()};
 function nidx(x){var r=nav.getBoundingClientRect(),w=(r.width-10)/NB.length;return Math.max(0,Math.min(NB.length-1,Math.floor((x-r.left-5)/w)))}
 nav.addEventListener('pointerdown',function(e){nvd={x:e.clientX,m:false,id:e.pointerId};try{nav.setPointerCapture(e.pointerId)}catch(_){}});
 nav.addEventListener('pointermove',function(e){if(!nvd)return;if(Math.abs(e.clientX-nvd.x)>6)nvd.m=true;if(!nvd.m)return;var r=nav.getBoundingClientRect(),w=(r.width-10)/NB.length;nvpos(0,Math.max(0,Math.min(r.width-10-w,e.clientX-r.left-5-w/2)))});
-nav.addEventListener('pointerup',function(e){if(!nvd)return;var d=nvd;nvd=null;try{nav.releasePointerCapture(d.id)}catch(_){}NB[nidx(e.clientX)].click()});
+nav.addEventListener('pointerup',function(e){if(!nvd)return;var d=nvd;nvd=null;try{nav.releasePointerCapture(d.id)}catch(_){}goTab(nidx(e.clientX))});
 nav.addEventListener('pointercancel',function(){nvd=null;nvpos(NI)});
 nvpos(0);
+var swp=null;
+document.addEventListener('touchstart',function(e){
+ if(e.touches.length!==1)return;
+ var t=e.target;
+ if(!t||t.closest('nav,input,select,textarea,#md.on,#mc.on,#mx.on,#mq.on,#mo.on,#mg.on')){swp=null;return}
+ swp={x:e.touches[0].clientX,y:e.touches[0].clientY,t:Date.now(),lock:false};
+},{passive:true});
+document.addEventListener('touchmove',function(e){
+ if(!swp||e.touches.length!==1)return;
+ var dx=e.touches[0].clientX-swp.x,dy=e.touches[0].clientY-swp.y;
+ if(!swp.lock){
+  if(Math.abs(dx)<10&&Math.abs(dy)<10)return;
+  if(Math.abs(dx)>Math.abs(dy)*1.25)swp.lock=true;
+  else{swp=null;return}
+ }
+ var edge=(NI===0&&dx>0)||(NI===NB.length-1&&dx<0);
+ var shift=edge?dx*0.14:dx*0.32;
+ var sec=VS[NI];
+ if(sec){sec.style.transition='none';sec.style.transform='translateX('+shift+'px)'}
+ var r=nav.getBoundingClientRect(),w=(r.width-10)/NB.length;
+ var ratio=Math.max(0,Math.min(NB.length-1,NI-(dx/(r.width||320))));
+ nvpos(0,ratio*w);
+},{passive:true});
+document.addEventListener('touchend',function(e){
+ if(!swp)return;
+ var s=swp;swp=null;
+ if(!s.lock)return;
+ var endX=(e.changedTouches&&e.changedTouches[0])?e.changedTouches[0].clientX:s.x;
+ var dx=endX-s.x,dt=Date.now()-s.t;
+ var sec=VS[NI];
+ if(sec){sec.style.transition='transform 0.24s cubic-bezier(0.22, 1, 0.36, 1)';sec.style.transform=''}
+ if((Math.abs(dx)>52||(Math.abs(dx)>28&&dt<260))){
+  var next=NI+(dx<0?1:-1);
+  if(next>=0&&next<NB.length){goTab(next,dx<0?1:-1);return}
+ }
+ nvpos(NI);
+},{passive:true});
+document.addEventListener('touchcancel',function(){
+ if(!swp)return;swp=null;
+ var sec=VS[NI];
+ if(sec){sec.style.transition='transform 0.2s ease';sec.style.transform=''}
+ nvpos(NI);
+},{passive:true});
 var eid=null;
 function lv(t){var d=new Date(t);return dk(t)+'T'+p2(d.getHours())+':'+p2(d.getMinutes())}
 function openM(x){eid=x?x.id:null;$('mtl').textContent=x?'Edytuj wpis':'Nowy wpis';$('es').value=x?lv(x.s):'';$('ee').value=x&&x.e?lv(x.e):'';$('er').textContent='';$('dl').style.display=x?'':'none';$('md').classList.add('on')}
@@ -506,5 +599,5 @@ $('fi').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.tex
 document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
 document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
 document.addEventListener('touchmove',function(e){if(e.touches.length>1)e.preventDefault()},{passive:false});
-[['pvb','pvc'],['pbb','pbc']].forEach(function(p){var b=$(p[0]),c=$(p[1]);if(b&&c)b.onclick=function(){var o=c.style.display==='none';c.style.display=o?'block':'none';b.setAttribute('aria-expanded',o?'true':'false')}});
+[['pvb','pvc'],['pbb','pbc']].forEach(function(p){var b=$(p[0]),c=$(p[1]);if(b&&c)b.onclick=function(){togglePanel(b,c)}});
 render();
