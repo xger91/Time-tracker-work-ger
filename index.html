@@ -597,15 +597,31 @@ nav button.on {
   margin: 4px 0 10px;
 }
 
-#bld {
+.ftr {
   margin: 14px 4px 0;
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+#bld {
   font-size: 11px;
   font-weight: 400;
   letter-spacing: 0.02em;
   color: var(--mut);
   opacity: 0.55;
   user-select: none;
+}
+#gb {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.78;
 }
 .sec-btn {
   width: 100%;
@@ -668,7 +684,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <h2>Dzisiejsze wpisy</h2><div class="card" id="tl"></div>
 </section>
 <section class="v" id="v2">
- <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:22px 0 8px">Raport miesiąca</h2><button class="btn" id="gb" aria-label="Opcje" title="Opcje" style="width:40px;height:40px;padding:0;font-size:20px;line-height:1">⚙️</button></div>
+ <h2>Raport miesiąca</h2>
  <div class="gap" style="margin-bottom:8px"><button class="btn p" id="rmM">Miesiąc</button><button class="btn" id="rmW">Tydzień</button></div>
  <input type="month" id="m2"><input type="date" id="w2" style="display:none">
  <div class="card"><div class="mut">Przepracowano w okresie</div><div class="tot" id="mt"></div><div class="mut" id="md2"></div></div>
@@ -703,7 +719,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
   <h2>Odebrane godziny</h2><div class="card" id="ol"></div>
  </div>
 </section>
-<div id="bld" aria-label="Wersja kompilacji"></div>
+<div class="ftr"><span id="bld" aria-label="Wersja kompilacji"></span><button class="btn" id="gb" type="button" aria-label="Opcje" title="Opcje">⚙️</button></div>
 </main>
 <nav><div id="nv"></div><button class="on" data-t="0">Dziś</button><button data-t="1">Raport</button><button data-t="2">Portal</button></nav>
 <div id="mo"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:18px">Opcje</b><button class="btn" id="go">Zamknij</button></div>
