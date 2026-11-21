@@ -202,8 +202,9 @@ $('gkc').onclick=function(){GP=null;$('mg').classList.remove('on');gm('Anulowano
 $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{gapply(q.rem.d);gfin(q.rem.mod);gm('Zastąpiono dane tego urządzenia danymi z Dysku.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
-var APP_BUILD='2.7.4';
+var APP_BUILD='2.7.5';
 var VER=[
+{v:'2.7.5',n:'Kompaktowy pasek górny i poprawki iOS',d:'21.11.2026',c:['Kółka urlopu/godzin oraz rozwijany przycisk Kalendarz połączone w jeden poziomy pasek u góry ekranu','Dodany bezpieczny odstęp od Dynamic Island i paska statusu na iPhonie','Pełne tło na dole ekranu na krótszych zakładkach i stabilna pozycja dolnego menu']},
 {v:'2.7.4',n:'Animacje i gest przesuwania',d:'21.11.2026',c:['Sprężyste animacje przycisków, wierszy wpisów i głównego przycisku Wejście / Wyjście','Przełączanie zakładek (Dziś, Raport, Portal) gestem przesunięcia palcem w lewo lub w prawo po ekranie','Płynne wysuwanie dolnych okien dialogowych oraz animowane rozwijanie sekcji w Portalu i Kalendarzu']},
 {v:'2.7.3',n:'Zwijane sekcje w Portalu',d:'21.11.2026',c:['Zakładka Portal podzielona na dwie zwijane sekcje: Urlop (z podsumowaniem pozostałych dni) oraz Bank godzin (z aktualnym saldem)','Obie sekcje domyślnie zwinięte po uruchomieniu aplikacji','Dodano ikony 192 i 512 px do pamięci podręcznej trybu offline']},
 {v:'2.7.2',n:'Nowe menu',d:'21.11.2026',c:['Dolne menu ma 3 zakładki: Dziś, Raport i Portal','Historia przeniesiona na dół zakładki Raport','Urlop i Bank godzin połączone w jedną zakładkę Portal (najpierw Urlop, potem Bank)']},
@@ -226,7 +227,7 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(9,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(10,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  if($('bld'))$('bld').textContent='v'+cur.v;

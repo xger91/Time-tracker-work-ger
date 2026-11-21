@@ -53,10 +53,16 @@
 * {
   box-sizing: border-box;
 }
+html {
+  min-height: 100%;
+  min-height: 100lvh;
+  background: var(--bg);
+}
 html,
 body {
   margin: 0;
   min-height: 100%;
+  min-height: 100lvh;
   background: var(--bg);
   color: var(--fg);
   font: 16px/1.4 -apple-system, system-ui, "Segoe UI", sans-serif;
@@ -68,7 +74,7 @@ body {
 main {
   max-width: 520px;
   margin: 0 auto;
-  padding: 16px 16px 90px;
+  padding: calc(12px + env(safe-area-inset-top, 0px)) 16px calc(110px + env(safe-area-inset-bottom, 0px));
 }
 h2 {
   font-size: 15px;
@@ -105,9 +111,21 @@ h2 {
 .big:disabled {
   opacity: 0.45;
 }
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+}
+#chd {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
 .ci {
-  width: 88px;
-  height: 88px;
+  width: 68px;
+  height: 68px;
   border-radius: 50%;
   background: var(--ac);
   color: var(--on);
@@ -117,13 +135,31 @@ h2 {
   justify-content: center;
   text-align: center;
   line-height: 1.15;
+  padding: 4px;
 }
 .ci b {
-  font-size: 24px;
+  font-size: 18px;
 }
 .ci span {
-  font-size: 11px;
-  opacity: 0.9;
+  font-size: 10px;
+  opacity: 0.92;
+}
+#kb {
+  flex: 1;
+  min-width: 0;
+  height: 68px;
+  margin: 0;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  transition: transform 0.16s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+#kb:active {
+  transform: scale(0.98);
 }
 .cg {
   display: grid;
@@ -364,16 +400,17 @@ body {
 body::before {
   content: "";
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  min-height: 100lvh;
   z-index: -1;
   background:
     radial-gradient(60% 40% at 12% 8%, var(--b1), transparent 65%),
     radial-gradient(50% 40% at 92% 22%, var(--b2), transparent 65%),
     radial-gradient(60% 50% at 70% 96%, var(--b3), transparent 65%),
     var(--bg);
-}
-main {
-  padding-bottom: calc(110px + env(safe-area-inset-bottom, 0px));
 }
 .card {
   background: var(--card);
@@ -613,8 +650,11 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
 </head>
 <body>
 <main>
-<div id="chd" style="display:flex;justify-content:center;gap:16px;margin:4px 0 6px"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
-<div class="card" style="padding:0;margin-bottom:10px"><button id="kb" type="button" aria-expanded="false" aria-controls="kc" style="width:100%;display:flex;justify-content:space-between;background:none;border:0;padding:12px 14px;font-weight:600"><span>Kalendarz</span><span id="ka">▾</span></button><div id="kc" style="display:none;padding:0 12px 12px"></div></div>
+<div class="top-bar">
+ <div id="chd"><div class="ci" id="c1"></div><div class="ci" id="c2"></div></div>
+ <button class="card" id="kb" type="button" aria-expanded="false" aria-controls="kc"><span>Kalendarz</span><span id="ka">▾</span></button>
+</div>
+<div class="card" id="kc" style="display:none;padding:12px;margin-bottom:10px"></div>
 <section class="v on" id="v0">
  <div class="card mut" id="install" hidden><strong>Dodaj aplikację na iPhonie</strong><br>W Safari wybierz Udostępnij → Do ekranu głównego. Jeśli zobaczysz opcję „Otwórz jako aplikację www”, włącz ją i stuknij „Dodaj”. Pierwszy raz otwórz aplikację z ikony, gdy masz internet.</div>
  <h2>Dziś</h2>
