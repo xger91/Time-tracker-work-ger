@@ -202,8 +202,10 @@ $('gkc').onclick=function(){GP=null;$('mg').classList.remove('on');gm('Anulowano
 $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{gapply(q.rem.d);gfin(q.rem.mod);gm('Zastąpiono dane tego urządzenia danymi z Dysku.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
-var APP_BUILD='2.9';
+var APP_BUILD='2.7.2';
 var VER=[
+{v:'2.7.2',n:'Nowe menu',d:'21.11.2026',c:['Dolne menu ma 3 zakładki: Dziś, Raport i Portal','Historia przeniesiona na dół zakładki Raport','Urlop i Bank godzin połączone w jedną zakładkę Portal (najpierw Urlop, potem Bank)']},
+{v:'2.7.1',n:'Ujednolicenie wersji',d:'21.11.2026',c:['Jeden numer wersji w aplikacji, historii zmian i pamięci offline; usunięty powtarzający się dopisek „build”','Dodane ikony PNG 192 i 512 px oraz poprawiony manifest (ikona SVG jako zwykła)']},
 {v:'2.7',n:'Stały pulpit i sprawdzanie wersji',d:'20.11.2026',c:['Przywrócono stały widok kółek urlopu/godzin oraz karty Kalendarz u góry ekranu','Dodano przycisk „Sprawdź aktualizacje” w Opcjach z możliwością natychmiastowego pobrania nowej wersji','Dodano subtelną informację o numerze wersji i buildzie na samym dole po prawej stronie']},
 {v:'2.6',n:'Blokada zoomu',d:'20.11.2026',c:['Wyłączone powiększanie widoku dwoma palcami (pinch-to-zoom) na iOS i Androidzie przy zachowaniu normalnego przewijania i wysuwania pulpitu']},
 {v:'2.5',n:'Wysuwany pulpit i czcionka v2.2',d:'20.11.2026',c:['Kółka urlopu/godzin i kalendarz domyślnie ukryte — wysuwają się po pociągnięciu ekranu w dół','Przywrócono dokładny krój i interlinię czcionek systemowych z wersji 2.2','Dodano app.js do pamięci podręcznej trybu offline']},
@@ -222,10 +224,10 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(5,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(7,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
- $('vnm').textContent='Wersja '+cur.v+' · '+cur.n+' (build '+APP_BUILD+')';
- if($('bld'))$('bld').textContent='v'+cur.v+' · build '+APP_BUILD;
+ $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
+ if($('bld'))$('bld').textContent='v'+cur.v;
  $('vlg').innerHTML=VER.map(function(x){return '<div style="margin-bottom:12px"><b>v'+x.v+' · '+x.n+'</b> <span class="mut">'+x.d+'</span><ul style="margin:4px 0 0 18px;padding:0;font-size:14px">'+x.c.map(function(l){return '<li>'+l+'</li>'}).join('')+'</ul></div>'}).join('');
  $('vbt').onclick=function(){var o=$('vlg').style.display==='none';$('vlg').style.display=o?'block':'none';$('vbt').textContent='Historia zmian '+(o?'▴':'▾')};
 })();
@@ -424,10 +426,10 @@ if($('vck'))$('vck').onclick=async function(){
   }catch(e){}
   var hasUpdate=Boolean((reg&&(reg.waiting||reg.installing))||(remoteBuild&&remoteBuild!==APP_BUILD));
   if(hasUpdate){
-   st.textContent='Dostępna nowa wersja'+(remoteBuild?' (build '+remoteBuild+')':'')+'! Kliknij „Zainstaluj nową wersję”, aby odświeżyć.';
+   st.textContent='Dostępna nowa wersja'+(remoteBuild?' (v'+remoteBuild+')':'')+'! Kliknij „Zainstaluj nową wersję”, aby odświeżyć.';
    up.style.display='';
   }else{
-   st.textContent='Masz najnowszą wersję aplikacji (v'+VER[0].v+' · build '+APP_BUILD+').';
+   st.textContent='Masz najnowszą wersję aplikacji (v'+VER[0].v+').';
   }
  }catch(e){
   st.textContent='Nie udało się sprawdzić aktualizacji. Spróbuj ponownie za chwilę.';

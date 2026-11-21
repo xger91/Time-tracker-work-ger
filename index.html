@@ -442,7 +442,7 @@ nav button.on {
   top: 5px;
   bottom: 5px;
   left: 5px;
-  width: calc((100% - 10px) / 5);
+  width: calc((100% - 10px) / 3);
   border-radius: 28px;
   background: rgba(127, 127, 127, 0.2);
   border: 1px solid var(--bd);
@@ -521,14 +521,6 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <div class="mut" id="ds" style="margin:-2px 4px 6px"></div>
  <h2>Dzisiejsze wpisy</h2><div class="card" id="tl"></div>
 </section>
-<section class="v" id="v1">
- <h2>Historia</h2>
- <div class="mut" style="text-align:center">Filtr miesiąca (puste = wszystkie wpisy)</div>
- <input type="month" id="m1" style="display:block;width:70%;max-width:260px;margin:4px auto 8px;text-align:center">
- <button class="btn" id="ma" style="display:block;margin:0 auto 12px">Pokaż wszystkie miesiące</button>
- <button class="btn p" id="add">+ Dodaj wpis ręcznie</button>
- <div id="hl" style="margin-top:12px"></div>
-</section>
 <section class="v" id="v2">
  <div style="display:flex;justify-content:space-between;align-items:center"><h2 style="margin:22px 0 8px">Raport miesiąca</h2><button class="btn" id="gb" aria-label="Opcje" title="Opcje" style="width:40px;height:40px;padding:0;font-size:20px;line-height:1">⚙️</button></div>
  <div class="gap" style="margin-bottom:8px"><button class="btn p" id="rmM">Miesiąc</button><button class="btn" id="rmW">Tydzień</button></div>
@@ -537,7 +529,13 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <div class="gap"><button class="btn p" id="csv">Eksport CSV (Excel)</button><button class="btn p" id="pdf">Eksport PDF</button></div>
  <h2>Norma czasu pracy</h2>
  <div class="card"><label class="mut">Godzin dziennie</label><input type="number" id="nh" min="0" max="24" step="0.5" inputmode="decimal"><div class="mut" style="margin-bottom:8px">Dni pracujące (norma liczy się tylko za te dni)</div><div class="gap" id="wd"></div></div>
- </section>
+ <h2 style="margin-top:34px">Historia</h2>
+ <div class="mut" style="text-align:center">Filtr miesiąca (puste = wszystkie wpisy)</div>
+ <input type="month" id="m1" style="display:block;width:70%;max-width:260px;margin:4px auto 8px;text-align:center">
+ <button class="btn" id="ma" style="display:block;margin:0 auto 12px">Pokaż wszystkie miesiące</button>
+ <button class="btn p" id="add">+ Dodaj wpis ręcznie</button>
+ <div id="hl" style="margin-top:12px"></div>
+</section>
 <section class="v" id="v3">
  <h2>Urlop</h2>
  <div class="gap" style="align-items:center;margin-bottom:8px"><button class="btn" id="yp">‹</button><b id="yl"></b><button class="btn" id="yn">›</button></div>
@@ -548,9 +546,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <div class="card"><input type="date" id="hd"><button class="btn p" id="ha">Dodaj święto</button></div>
  <h2>Urlopy w roku</h2><div class="card" id="vl"></div>
  <h2>Święta w roku</h2><div class="card" id="hl2"></div>
-</section>
-<section class="v" id="v4">
- <h2>Bank godzin</h2>
+ <h2 style="margin-top:34px">Bank godzin</h2>
  <div class="card"><div class="mut">Saldo banku godzin</div><div class="tot" id="bb"></div><div class="mut" id="bd"></div></div>
  <h2>Odbiór godzin</h2>
  <div class="card"><label class="mut">Dzień</label><input type="date" id="od"><label class="mut">Od godziny</label><input type="time" id="of"><label class="mut">Do godziny</label><input type="time" id="ot"><button class="btn p" id="oa">Dodaj odbiór</button><p class="mut" id="om"></p></div>
@@ -559,7 +555,7 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
 </section>
 <div id="bld" aria-label="Wersja kompilacji"></div>
 </main>
-<nav><div id="nv"></div><button class="on" data-t="0">Dziś</button><button data-t="1">Historia</button><button data-t="2">Raport</button><button data-t="3">Urlop</button><button data-t="4">Bank</button></nav>
+<nav><div id="nv"></div><button class="on" data-t="0">Dziś</button><button data-t="1">Raport</button><button data-t="2">Portal</button></nav>
 <div id="mo"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:18px">Opcje</b><button class="btn" id="go">Zamknij</button></div>
  <h2>Tryb offline</h2>
  <div class="card"><div class="mut" id="ofs" role="status">Sprawdzam…</div><div class="gap"><button class="btn p" id="ofa">Zapisz do użycia offline</button><button class="btn d" id="ofr">Usuń zapisane offline</button></div><p class="mut" style="font-size:13px;margin:8px 0 0">Po otwarciu z ekranu głównego aplikacja zapisuje pliki do pracy offline. Usunięcie tych plików nie kasuje wpisów. Synchronizacja z Dyskiem Google wymaga internetu.</p></div>
