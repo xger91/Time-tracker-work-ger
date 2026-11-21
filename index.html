@@ -502,6 +502,44 @@ nav button.on {
   opacity: 0.55;
   user-select: none;
 }
+.sec-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 20px;
+  text-align: left;
+  transition: transform 0.15s ease;
+}
+.sec-btn:active {
+  transform: scale(0.99);
+}
+.sec-hd {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.sec-t {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fg);
+}
+.sec-s {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ac);
+}
+.sec-ar {
+  flex: none;
+  font-size: 18px;
+  color: var(--mut);
+  transition: transform 0.28s cubic-bezier(0.3, 1.2, 0.4, 1);
+}
+.sec-btn[aria-expanded="true"] .sec-ar {
+  transform: rotate(180deg);
+}
 button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
 </style>
 </head>
@@ -537,21 +575,25 @@ button:not(:disabled),[role="button"]:not(:disabled){cursor:pointer}
  <div id="hl" style="margin-top:12px"></div>
 </section>
 <section class="v" id="v3">
- <h2>Urlop</h2>
- <div class="gap" style="align-items:center;margin-bottom:8px"><button class="btn" id="yp">‹</button><b id="yl"></b><button class="btn" id="yn">›</button></div>
- <div class="card"><label class="mut">Dni urlopu przysługujące na rok</label><input type="number" id="al" min="0" max="366" step="1" inputmode="numeric"><div class="tot" id="rem"></div><div class="mut" id="usd"></div></div>
- <h2>Dodaj urlop</h2>
- <div class="card"><label class="mut">Od</label><input type="date" id="vf"><label class="mut">Do (puste = jeden dzień)</label><input type="date" id="vt"><button class="btn p" id="va">Dodaj urlop</button><p class="mut" id="vm"></p></div>
- <h2>Dzień świąteczny (blokuje wejście)</h2>
- <div class="card"><input type="date" id="hd"><button class="btn p" id="ha">Dodaj święto</button></div>
- <h2>Urlopy w roku</h2><div class="card" id="vl"></div>
- <h2>Święta w roku</h2><div class="card" id="hl2"></div>
- <h2 style="margin-top:34px">Bank godzin</h2>
- <div class="card"><div class="mut">Saldo banku godzin</div><div class="tot" id="bb"></div><div class="mut" id="bd"></div></div>
- <h2>Odbiór godzin</h2>
- <div class="card"><label class="mut">Dzień</label><input type="date" id="od"><label class="mut">Od godziny</label><input type="time" id="of"><label class="mut">Do godziny</label><input type="time" id="ot"><button class="btn p" id="oa">Dodaj odbiór</button><p class="mut" id="om"></p></div>
- <div class="card"><label class="mut">Saldo początkowe (godziny, może być ujemne)</label><input type="number" id="op" step="0.25" inputmode="decimal"></div>
- <h2>Odebrane godziny</h2><div class="card" id="ol"></div>
+ <button type="button" class="card sec-btn" id="pvb" aria-expanded="false" aria-controls="pvc" style="margin-top:6px"><span class="sec-hd"><span class="sec-t">Urlop</span><span class="sec-s" id="pvs"></span></span><span class="sec-ar" aria-hidden="true">▾</span></button>
+ <div id="pvc" style="display:none;margin-bottom:14px">
+  <div class="gap" style="align-items:center;margin:4px 0 8px"><button class="btn" id="yp">‹</button><b id="yl"></b><button class="btn" id="yn">›</button></div>
+  <div class="card"><label class="mut">Dni urlopu przysługujące na rok</label><input type="number" id="al" min="0" max="366" step="1" inputmode="numeric"><div class="tot" id="rem"></div><div class="mut" id="usd"></div></div>
+  <h2>Dodaj urlop</h2>
+  <div class="card"><label class="mut">Od</label><input type="date" id="vf"><label class="mut">Do (puste = jeden dzień)</label><input type="date" id="vt"><button class="btn p" id="va">Dodaj urlop</button><p class="mut" id="vm"></p></div>
+  <h2>Dzień świąteczny (blokuje wejście)</h2>
+  <div class="card"><input type="date" id="hd"><button class="btn p" id="ha">Dodaj święto</button></div>
+  <h2>Urlopy w roku</h2><div class="card" id="vl"></div>
+  <h2>Święta w roku</h2><div class="card" id="hl2"></div>
+ </div>
+ <button type="button" class="card sec-btn" id="pbb" aria-expanded="false" aria-controls="pbc" style="margin-top:12px"><span class="sec-hd"><span class="sec-t">Bank godzin</span><span class="sec-s" id="pbs"></span></span><span class="sec-ar" aria-hidden="true">▾</span></button>
+ <div id="pbc" style="display:none;margin-bottom:10px">
+  <div class="card" style="margin-top:4px"><div class="mut">Saldo banku godzin</div><div class="tot" id="bb"></div><div class="mut" id="bd"></div></div>
+  <h2>Odbiór godzin</h2>
+  <div class="card"><label class="mut">Dzień</label><input type="date" id="od"><label class="mut">Od godziny</label><input type="time" id="of"><label class="mut">Do godziny</label><input type="time" id="ot"><button class="btn p" id="oa">Dodaj odbiór</button><p class="mut" id="om"></p></div>
+  <div class="card"><label class="mut">Saldo początkowe (godziny, może być ujemne)</label><input type="number" id="op" step="0.25" inputmode="decimal"></div>
+  <h2>Odebrane godziny</h2><div class="card" id="ol"></div>
+ </div>
 </section>
 <div id="bld" aria-label="Wersja kompilacji"></div>
 </main>

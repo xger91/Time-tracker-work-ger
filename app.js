@@ -37,7 +37,7 @@ $('rmM').onclick=function(){setRM('m')};$('rmW').onclick=function(){setRM('w')};
 var VY=new Date().getFullYear();
 function inY(a){return a.filter(function(k){return k.indexOf(VY+'-')===0}).sort()}
 function lst(a,at){return a.length?a.map(function(k){return '<div class="row"><span>'+dl(k)+'.'+k.slice(0,4)+'</span><button class="btn d" data-'+at+'="'+k+'">Usuń</button></div>'}).join(''):'<span class="mut">Brak</span>'}
-function vren(){var v=inY(CF.vac);$('yl').textContent=VY;$('al').value=CF.allow;$('rem').textContent='Pozostało: '+(CF.allow-v.length)+' dni';$('usd').textContent='Wykorzystano '+v.length+' z '+CF.allow;$('vl').innerHTML=lst(v,'v');$('hl2').innerHTML=lst(inY(CF.hol),'h');dren()}
+function vren(){var v=inY(CF.vac);$('yl').textContent=VY;$('al').value=CF.allow;$('rem').textContent='Pozostało: '+(CF.allow-v.length)+' dni';if($('pvs'))$('pvs').textContent='Pozostało: '+(CF.allow-v.length)+' dni';$('usd').textContent='Wykorzystano '+v.length+' z '+CF.allow;$('vl').innerHTML=lst(v,'v');$('hl2').innerHTML=lst(inY(CF.hol),'h');dren()}
 $('dd').value=dk(Date.now());
 function yc(k){return CF.vac.filter(function(x){return x.slice(0,4)===k.slice(0,4)}).length}
 var DM='';
@@ -202,8 +202,9 @@ $('gkc').onclick=function(){GP=null;$('mg').classList.remove('on');gm('Anulowano
 $('gkr').onclick=function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{gapply(q.rem.d);gfin(q.rem.mod);gm('Zastąpiono dane tego urządzenia danymi z Dysku.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkl').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Dane z tego urządzenia wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
 $('gkm').onclick=async function(){var q=GP;GP=null;$('mg').classList.remove('on');if(!q)return;try{snapPrev();gmerge(q.rem.d);cfix();save();saveC();$('nh').value=CF.norm;wdr();render();var m=Date.now();await gput(q.id,{mod:m,d:{S:S,CF:CF}});gfin(m);gm('Połączono dane z obu stron i wysłano na Dysk.')}catch(e){gm('Błąd: '+((e&&e.message)||e))}};
-var APP_BUILD='2.7.2';
+var APP_BUILD='2.7.3';
 var VER=[
+{v:'2.7.3',n:'Zwijane sekcje w Portalu',d:'21.11.2026',c:['Zakładka Portal podzielona na dwie zwijane sekcje: Urlop (z podsumowaniem pozostałych dni) oraz Bank godzin (z aktualnym saldem)','Obie sekcje domyślnie zwinięte po uruchomieniu aplikacji','Dodano ikony 192 i 512 px do pamięci podręcznej trybu offline']},
 {v:'2.7.2',n:'Nowe menu',d:'21.11.2026',c:['Dolne menu ma 3 zakładki: Dziś, Raport i Portal','Historia przeniesiona na dół zakładki Raport','Urlop i Bank godzin połączone w jedną zakładkę Portal (najpierw Urlop, potem Bank)']},
 {v:'2.7.1',n:'Ujednolicenie wersji',d:'21.11.2026',c:['Jeden numer wersji w aplikacji, historii zmian i pamięci offline; usunięty powtarzający się dopisek „build”','Dodane ikony PNG 192 i 512 px oraz poprawiony manifest (ikona SVG jako zwykła)']},
 {v:'2.7',n:'Stały pulpit i sprawdzanie wersji',d:'20.11.2026',c:['Przywrócono stały widok kółek urlopu/godzin oraz karty Kalendarz u góry ekranu','Dodano przycisk „Sprawdź aktualizacje” w Opcjach z możliwością natychmiastowego pobrania nowej wersji','Dodano subtelną informację o numerze wersji i buildzie na samym dole po prawej stronie']},
@@ -224,7 +225,7 @@ var VER=[
 {v:'1.1',n:'Własna godzina',d:'14.11.2026',c:['„Wejście / Wyjście o innej godzinie” z kalendarzem i zegarem','Edycja wpisu także z ekranu Dziś','Kontrola poprawności: nie w przyszłości, wyjście po wejściu, brak nakładania']},
 {v:'1.0',n:'Start',d:'14.11.2026',c:['Przycisk Wejście / Wyjście i wiele wejść w ciągu dnia (liczy się tylko czas w pracy)','Historia z edycją, usuwaniem i ręcznym dodawaniem wpisów','Raport miesiąca z sumą, eksport do CSV (Excel) i PDF','Kopia zapasowa do pliku JSON']}
 ];
-(function(){if($('gdc'))VER.splice(7,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
+(function(){if($('gdc'))VER.splice(8,0,{v:'2.2',n:'Synchronizacja Google',d:'20.11.2026',c:['Opcjonalna synchronizacja danych między urządzeniami przez ukryty folder aplikacji na Dysku Google (w Opcjach, domyślnie wyłączona)']});var cur=VER[0];
  if($('ofa'))VER.filter(function(x){return x.v==='2.0'})[0].c.push('Tryb offline (tylko wersja na własnym serwerze): zapis apki w pamięci przeglądarki i usuwanie jednym przyciskiem');
  $('vnm').textContent='Wersja '+cur.v+' · '+cur.n;
  if($('bld'))$('bld').textContent='v'+cur.v;
@@ -233,7 +234,7 @@ var VER=[
 })();
 function tmin(v){var p=v.split(':');return +p[0]*60+ +p[1]}
 function hh(m){return p2(Math.floor(m/60))+':'+p2(m%60)}
-function bren(){var b=bank();$('bb').textContent=sd(b.bal);
+function bren(){var b=bank();$('bb').textContent=sd(b.bal);if($('pbs'))$('pbs').textContent=sd(b.bal);
  $('bd').innerHTML='Nadgodziny zebrane: '+dur(b.ot)+'<br>Odebrane: '+dur(b.tk)+'<br>Saldo początkowe: '+sd(b.op);
  if(document.activeElement!==$('op'))$('op').value=CF.open||0;
  var L=CF.off.slice().sort(function(a,b){return a.d<b.d?1:a.d>b.d?-1:b.f-a.f});
@@ -337,7 +338,7 @@ var appMode=navigator.standalone===true||matchMedia('(display-mode: standalone)'
 if(!appMode&&/iPhone|iPad|iPod/.test(navigator.userAgent))$('install').hidden=false;
 var swScope=new URL('./',document.baseURI),swScript=new URL('sw.js',swScope).href;
 var swPrefix='czas-pracy-pwa:'+swScope.pathname+':',swCache=swPrefix+APP_BUILD;
-var swFiles=['./','index.html','app.js','manifest.json','icon.svg','icon-180.png'];
+var swFiles=['./','index.html','app.js','manifest.json','icon.svg','icon-180.png','icon-192.png','icon-512.png'];
 var swLibs=Array.from(document.querySelectorAll('head script[src]'),function(s){return s.src});
 var swBusy=false;
 function swPref(on){
@@ -505,4 +506,5 @@ $('fi').onchange=function(){var f=this.files[0];this.value='';if(!f)return;f.tex
 document.addEventListener('gesturestart',function(e){e.preventDefault()},{passive:false});
 document.addEventListener('gesturechange',function(e){e.preventDefault()},{passive:false});
 document.addEventListener('touchmove',function(e){if(e.touches.length>1)e.preventDefault()},{passive:false});
+[['pvb','pvc'],['pbb','pbc']].forEach(function(p){var b=$(p[0]),c=$(p[1]);if(b&&c)b.onclick=function(){var o=c.style.display==='none';c.style.display=o?'block':'none';b.setAttribute('aria-expanded',o?'true':'false')}});
 render();

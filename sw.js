@@ -1,7 +1,7 @@
 var scope = new URL(self.registration.scope);
 var prefix = 'czas-pracy-pwa:' + scope.pathname + ':';
-var cacheName = prefix + '2.7.2';
-var core = ['./', 'index.html', 'app.js', 'manifest.json', 'icon.svg', 'icon-180.png'].map(function (path) {
+var cacheName = prefix + '2.7.3';
+var core = ['./', 'index.html', 'app.js', 'manifest.json', 'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png'].map(function (path) {
   return new URL(path, scope).href;
 });
 var libraries = [
